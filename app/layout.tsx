@@ -1,7 +1,14 @@
-import React from 'react';
+import '@styles/styles.css';
 
-const layout = () => {
-  return <div>layout</div>;
-};
+interface RootLayoutProps {
+  children: React.ReactNode;
+  params: { lang: string };
+}
 
-export default layout;
+export default async function RootLayout({ children }: RootLayoutProps) {
+  return (
+    <html>
+      <body className="font-LexendDeca font-light">{children}</body>
+    </html>
+  );
+}
