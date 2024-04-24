@@ -1,3 +1,4 @@
+import { StateProvider } from '@context/StateProvider';
 import '@styles/styles.css';
 
 interface RootLayoutProps {
@@ -8,7 +9,9 @@ interface RootLayoutProps {
 export default async function RootLayout({ children }: RootLayoutProps) {
   return (
     <html>
-      <body className="font-LexendDeca font-light">{children}</body>
+      <body className="font-LexendDeca font-light">
+        <StateProvider> {children}</StateProvider>
+      </body>
     </html>
   );
 }

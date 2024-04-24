@@ -2,20 +2,26 @@ import { ParticlesCustom } from '@components/Login/Items/ParticlesCustom';
 import Login from '@components/Login/Login';
 import { Metadata } from 'next';
 import React from 'react';
-import logo from '../assets/login/logo.ico';
+import logo from '@assets/login/logo.ico';
 import Image from 'next/image';
 import Link from 'next/link';
+import { getDictionary } from './dictionaries';
 
 export const metadata: Metadata = {
   title: 'Đăng nhập Hệ Thống',
 };
 
-const LoginPage = () => {
+const LoginPage = async ({
+  params,
+}: {
+  params: { lang: 'vi' | 'cn' | 'en' };
+}) => {
+  const dict = await getDictionary(params.lang);
   return (
     <div className="w-screen h-screen relative">
       <ParticlesCustom />
       <div className="bg-none w-full h-full relative z-20 flex justify-center items-center">
-        <Login />
+        <Login Lang={params.lang} dict={dict} />
       </div>
       <div className="absolute top-5 right-20 flex items-center gap-2 text-[14px] text-gray-400">
         <p>Powered by</p>

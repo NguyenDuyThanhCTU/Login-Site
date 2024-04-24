@@ -1,32 +1,32 @@
 'use client';
 import React, { useState } from 'react';
-import Input from './Items/Input';
-import Image from 'next/image';
-import vnflag from '../../assets/login/vn.png';
-import usflag from '../../assets/login/us.png';
+
 import Link from 'next/link';
 import { BiHide, BiShow } from 'react-icons/bi';
 import { Modal } from 'antd';
 import Recover from './Recover';
-const Login = () => {
+import SwitchLanguage from '@components/Items/SwitchLanguage';
+interface LoginProps {
+  Lang: string;
+  dict: any;
+}
+const Login = ({ Lang, dict }: LoginProps) => {
   const [Hide, setHide] = useState<boolean>(false);
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
   const [Username, setUsername] = useState<string>('');
   const [Password, setPassword] = useState<string>('');
   return (
-    <div className="bg-white ">
+    <div className="bg-white min-w-[350px] ">
       <div className="p-10">
         <div className="text-center font-semibold flex flex-col gap-2">
-          <h1 className=" text-[25px]">ADS - Đăng nhập</h1>
-          <p className="font-light">
-            Xin chào, vui lòng nhập thông tin đăng nhập{' '}
-          </p>
+          <h1 className=" text-[25px]">{dict.LoginPage.HeaderTitle}</h1>
+          <p className="font-light">{dict.LoginPage.HeaderContent}</p>
           <h2 className="text-[27px] ">ADS</h2>
         </div>
         <div className="flex flex-col gap-3 mt-4  ">
           <div className="w-full mt-3  font-semibold text-[13px] ">
             <div className="mb-2">
-              Tài khoản
+              {dict.LoginPage.Account}
               <p className="text-red-700 inline-block ml-1">*</p>
             </div>
             <div className="w-full border rounded-lg mb-1">
@@ -39,7 +39,7 @@ const Login = () => {
           </div>
           <div className="w-full   font-semibold text-[13px] ">
             <div className="mb-2">
-              Mật khẩu
+              {dict.LoginPage.Password}
               <p className="text-red-700 inline-block ml-1">*</p>
             </div>
             <div className="w-full border rounded-lg mb-1 relative">
@@ -66,12 +66,12 @@ const Login = () => {
           className="text-[14px] text-blue-600 hover:underline cursor-pointer"
           onClick={() => setIsOpenModal(true)}
         >
-          Quên mật khẩu
+          {dict.LoginPage.Recover}
         </p>
         <div className="py-3 bg-blue-600 text-white hover:bg-blue-700 text-center cursor-pointer rounded-md my-5">
-          Đăng nhập
+          {dict.LoginPage.Login}
         </div>
-        <div className="flex items-center justify-center  cursor-pointer">
+        {/* <div className="flex items-center justify-center  cursor-pointer">
           <div className=" hover:bg-slate-200 duration-300">
             <div className="flex items-center gap-2 p-2">
               <Image
@@ -96,26 +96,30 @@ const Login = () => {
               <p>English</p>
             </div>
           </div>
+        </div> */}
+        <div className="flex justify-center w-full">
+          <SwitchLanguage Lang={Lang} />
         </div>
         <div className="text-center text-[13px] font-normal text-slate-600 mt-5">
-          Bằng việc nhấn nút tiếp tục, bạn đã đồng ý với <br />
+          {dict.LoginPage.Policies}
+          <br />
           <Link
             href="https://policies.google.com/privacy"
             target="_blank"
             className="text-blue-600"
           >
-            Điều khoản sử dụng
+            {dict.LoginPage.Policy}
           </Link>{' '}
-          và{' '}
+          {dict.LoginPage.and}
           <Link
             href="https://policies.google.com/privacy"
             target="_blank"
             className="text-blue-600"
           >
             {' '}
-            Chính sách bảo mật
+            {dict.LoginPage.Privacy}
           </Link>{' '}
-          Công Ty ADS
+          {dict.LoginPage.Company}
         </div>
       </div>
 
@@ -125,7 +129,7 @@ const Login = () => {
         footer={false}
         onCancel={() => setIsOpenModal(false)}
       >
-        <Recover />
+        <Recover dict={dict} />
       </Modal>
     </div>
   );
