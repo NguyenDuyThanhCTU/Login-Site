@@ -1,3 +1,5 @@
+import Loading from '@components/Items/Loading';
+import { AuthProviders } from '@context/AuthProviders';
 import { StateProvider } from '@context/StateProvider';
 import '@styles/styles.css';
 
@@ -10,7 +12,10 @@ export default async function RootLayout({ children }: RootLayoutProps) {
   return (
     <html>
       <body className="font-LexendDeca font-light">
-        <StateProvider> {children}</StateProvider>
+        <StateProvider>
+          <Loading />
+          <AuthProviders>{children}</AuthProviders>
+        </StateProvider>
       </body>
     </html>
   );

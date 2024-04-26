@@ -6,6 +6,8 @@ import logo from '@assets/login/logo.ico';
 import Image from 'next/image';
 import Link from 'next/link';
 import { getDictionary } from './dictionaries';
+import { find } from '@config/api/api';
+import { firebaseConfig } from '@config/firebase/Firebase';
 
 export const metadata: Metadata = {
   title: 'Đăng nhập Hệ Thống',
@@ -17,11 +19,12 @@ const LoginPage = async ({
   params: { lang: 'vi' | 'cn' | 'en' };
 }) => {
   const dict = await getDictionary(params.lang);
+  const Accounts = await find(firebaseConfig, 'Accounts');
   return (
     <div className="w-screen h-screen relative">
       <ParticlesCustom />
       <div className="bg-none w-full h-full relative z-20 flex justify-center items-center">
-        <Login Lang={params.lang} dict={dict} />
+        <Login Lang={params.lang} dict={dict} Data={Accounts} />
       </div>
       <div className="absolute top-5 right-20 flex items-center gap-2 text-[14px] text-gray-400">
         <p>Powered by</p>

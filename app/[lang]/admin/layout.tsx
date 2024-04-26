@@ -1,3 +1,6 @@
+'use client';
+import { useAuth } from '@context/AuthProviders';
+import { useRouter } from 'next/navigation';
 import React from 'react';
 
 interface DashboardLayout {
@@ -5,6 +8,11 @@ interface DashboardLayout {
 }
 
 const DashboardLayout = ({ children }: DashboardLayout) => {
+  const { verify } = useAuth();
+  if (!verify) {
+    const router = useRouter();
+    return router.push('/');
+  }
   return <div>{children}</div>;
 };
 

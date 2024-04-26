@@ -1,20 +1,97 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import Link from 'next/link';
 import { BiHide, BiShow } from 'react-icons/bi';
-import { Modal } from 'antd';
+import { Modal, notification } from 'antd';
 import Recover from './Recover';
 import SwitchLanguage from '@components/Items/SwitchLanguage';
+import { AccountProps } from '@assets/props';
+import { useAuth } from '@context/AuthProviders';
+import { useStateProvider } from '@context/StateProvider';
 interface LoginProps {
   Lang: string;
   dict: any;
+  Data: AccountProps[];
 }
-const Login = ({ Lang, dict }: LoginProps) => {
+
+interface isLoginFormProps {
+  username: string;
+  password: string;
+}
+const Login = ({ Lang, dict, Data }: LoginProps) => {
   const [Hide, setHide] = useState<boolean>(false);
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
-  const [Username, setUsername] = useState<string>('');
-  const [Password, setPassword] = useState<string>('');
+  const [isFirebaseConfig, setFirebaseConfig] = useState<AccountProps[]>([]);
+  const [isLoginForm, setIsLoginForm] = useState<isLoginFormProps>({
+    username: '',
+    password: '',
+  });
+  const { setVerify, setCurrentUser } = useAuth();
+  const { HandleNavigate, setIsLoading, setFormData } = useStateProvider();
+  useEffect(() => {
+    Data.map((item: AccountProps) => {
+      setFirebaseConfig([
+        ...isFirebaseConfig,
+        {
+          stt: item.stt,
+          id: item.id,
+          name: item.name,
+          username: item.username,
+          password: item.password,
+          role: item.role,
+          date: item.date,
+          firebaseConfig: {
+            apiKey: item.apiKey,
+            appId: item.appId,
+            authDomain: `${item.projectId}.firebaseapp.com`,
+            storageBucket: `${item.projectId}.appspot.com`,
+            measurementId: item.measurementId,
+            messagingSenderId: item.messagingSenderId,
+            projectId: item.projectId,
+          },
+          apiKey: item.apiKey,
+          projectId: item.projectId,
+          messagingSenderId: item.measurementId,
+          appId: item.appId,
+          measurementId: item.measurementId,
+        },
+      ]);
+    });
+  }, []);
+
+  const HandleLogin = () => {
+    if (isLoginForm.password === '' || isLoginForm.username === '') {
+      notification.error({
+        message: 'Lỗi thiếu thông tin',
+        description: 'Vui lòng nhập thông tin Tài khoản và Mật khẩu.',
+      });
+    } else {
+      const checkedAccount = isFirebaseConfig.find(
+        (item) =>
+          item.username === isLoginForm.username &&
+          item.password === isLoginForm.password
+      );
+      setIsLoading(1500);
+      if (checkedAccount) {
+        localStorage.setItem('currentUser', JSON.stringify(checkedAccount));
+        setCurrentUser(checkedAccount);
+        setVerify(true);
+
+        HandleNavigate('/admin');
+        notification.success({
+          message: 'Đăng nhập thành công',
+          description: 'Vui lòng nhập thông tin Tài khoản và Mật khẩu.',
+        });
+      } else {
+        notification.error({
+          message: 'Lỗi sai thông tin',
+          description: 'Thông tin Tài khoản hoặc Mật khẩu không chính xác.',
+        });
+      }
+    }
+  };
+
   return (
     <div className="bg-white min-w-[350px] ">
       <div className="p-10">
@@ -33,7 +110,9 @@ const Login = ({ Lang, dict }: LoginProps) => {
               <input
                 type="text"
                 className="p-2 w-full font-normal rounded-lg"
-                onChange={(e) => setUsername(e.target.value)}
+                onChange={(e) =>
+                  setIsLoginForm({ ...isLoginForm, username: e.target.value })
+                }
               />
             </div>
           </div>
@@ -46,7 +125,9 @@ const Login = ({ Lang, dict }: LoginProps) => {
               <input
                 type={Hide ? 'text' : 'password'}
                 className="p-2  w-full font-normal rounded-lg "
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) =>
+                  setIsLoginForm({ ...isLoginForm, password: e.target.value })
+                }
               />
               {Hide ? (
                 <BiHide
@@ -68,7 +149,10 @@ const Login = ({ Lang, dict }: LoginProps) => {
         >
           {dict.LoginPage.Recover}
         </p>
-        <div className="py-3 bg-blue-600 text-white hover:bg-blue-700 text-center cursor-pointer rounded-md my-5">
+        <div
+          className="py-3 bg-blue-600 text-white hover:bg-blue-700 text-center cursor-pointer rounded-md my-5"
+          onClick={() => HandleLogin()}
+        >
           {dict.LoginPage.Login}
         </div>
         {/* <div className="flex items-center justify-center  cursor-pointer">
