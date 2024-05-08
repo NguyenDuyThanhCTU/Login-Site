@@ -1,6 +1,13 @@
 'use client';
-import { AccountProps } from '@assets/props';
+import {
+  AccountProps,
+  FirebaseConfigProps,
+  PostProps,
+  ProductProps,
+} from '@assets/props';
+import { useRouter } from 'next/navigation';
 import React, { createContext, useContext, useState } from 'react';
+import { useStateProvider } from './StateProvider';
 
 interface Props {
   children: React.ReactNode;
@@ -11,18 +18,27 @@ export type AuthContextType = {
   setVerify: (state: boolean) => void;
   currentUser: AccountProps;
   setCurrentUser: (currentUser: any) => void;
+  ConfigData: any;
+  setConfigData: (ConfigData: any) => void;
+  ProductsData: ProductProps[];
+  setProductsData: (ProductsData: any) => void;
+  PostsData: PostProps[];
+  setPostsData: (PostsData: any) => void;
+  HandleDashboardNavigate: (url: any) => void;
+  isUserKey: string;
+  setUserKey: (isUserKey: string) => void;
 };
 
 export const AuthContext = createContext<AuthContextType>({
   verify: false,
   setVerify: () => {},
   currentUser: {
-    date: '',
+    stt: 0,
     id: '',
-    image: '',
     name: '',
+    username: '',
     password: '',
-    role: 'editor',
+    role: 'user',
     apiKey: '',
     appId: '',
     firebaseConfig: {
@@ -37,23 +53,34 @@ export const AuthContext = createContext<AuthContextType>({
     measurementId: '',
     messagingSenderId: '',
     projectId: '',
-    stt: 0,
-    username: '',
-    email: '',
+    date: '',
+    image: '',
     phone: '',
+    email: '',
   },
   setCurrentUser: () => {},
+  ConfigData: [],
+  setConfigData: () => {},
+  ProductsData: [],
+  setProductsData: () => {},
+  PostsData: [],
+  setPostsData: () => {},
+  HandleDashboardNavigate: () => {},
+  isUserKey: '',
+  setUserKey: () => {},
 });
 
 export const AuthProviders = ({ children }: Props) => {
+  const { setIsLoading } = useStateProvider();
   const [verify, setVerify] = useState(false);
+  const [isUserKey, setUserKey] = useState<string>('');
   const [currentUser, setCurrentUser] = useState<AccountProps>({
-    date: '',
+    stt: 0,
     id: '',
-    image: '',
     name: '',
+    username: '',
     password: '',
-    role: 'editor',
+    role: 'user',
     apiKey: '',
     appId: '',
     firebaseConfig: {
@@ -68,15 +95,37 @@ export const AuthProviders = ({ children }: Props) => {
     measurementId: '',
     messagingSenderId: '',
     projectId: '',
-    stt: 0,
-    username: '',
-    email: '',
+    date: '',
+    image: '',
     phone: '',
+    email: '',
   });
+  const [ConfigData, setConfigData] = useState<Array<any>>([]);
+  const [ProductsData, setProductsData] = useState<ProductProps[]>([]);
+  const [PostsData, setPostsData] = useState<PostProps[]>([]);
 
+  const router = useRouter();
+  const HandleDashboardNavigate = (url: any) => {
+    router.push(`${url}&key=${isUserKey}`);
+    setIsLoading(1000);
+  };
   return (
     <AuthContext.Provider
-      value={{ verify, setVerify, currentUser, setCurrentUser }}
+      value={{
+        HandleDashboardNavigate,
+        isUserKey,
+        setUserKey,
+        verify,
+        setVerify,
+        currentUser,
+        setCurrentUser,
+        ConfigData,
+        setConfigData,
+        ProductsData,
+        setProductsData,
+        PostsData,
+        setPostsData,
+      }}
     >
       {children}
     </AuthContext.Provider>

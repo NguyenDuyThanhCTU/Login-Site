@@ -20,6 +20,7 @@ const LoginPage = async ({
 }) => {
   const dict = await getDictionary(params.lang);
   const Accounts = await find(firebaseConfig, 'Accounts');
+
   return (
     <div className="w-screen h-screen relative">
       <ParticlesCustom />

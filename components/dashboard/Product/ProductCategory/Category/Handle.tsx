@@ -1,0 +1,139 @@
+'use client';
+
+import InputForm from '@components/dashboard/items/UI/InputForm';
+import { insertAndCustomizeId } from '@config/api/api';
+import { useAuth } from '@context/AuthProviders';
+import { useStateProvider } from '@context/StateProvider';
+import { notification } from 'antd';
+import { useRouter } from 'next/navigation';
+import React, { useState } from 'react';
+import { MdUpload } from 'react-icons/md';
+import { RxCross2 } from 'react-icons/rx';
+
+interface ProductCategoryFormProps {
+  setIsOpen: (isOpen: boolean) => void;
+  categoryLength: number;
+  Type?: string;
+}
+
+const ProductCategoryForm = ({
+  setIsOpen,
+  categoryLength,
+  Type,
+}: ProductCategoryFormProps) => {
+  const router = useRouter();
+  const { currentUser } = useAuth();
+
+  const [Level1, setLevel1] = useState<string>('');
+  const { FormData, setFormData } = useStateProvider();
+  const HandleChangeLevel1 = (item: number) => {
+    let newLevel1 = FormData?.level1?.filter((i: any) => i !== item);
+    setFormData({ ...FormData, level1: newLevel1 });
+  };
+
+  const HandleSubmit = async () => {
+    if (FormData?.level0 === undefined) {
+      notification.error({
+        message: 'Vui lòng chọn loại sản phẩm',
+      });
+    } else {
+      let Data = { ...FormData, stt: categoryLength };
+
+      await insertAndCustomizeId(
+        currentUser.firebaseConfig,
+        'ProductCategory',
+        Data,
+        `${categoryLength ? 100000000000 + categoryLength : 100000000000}`
+      ).then(() => {
+        setIsOpen(false);
+        router.refresh();
+      });
+    }
+  };
+
+  return (
+    <div>
+      <div className="p-2 flex flex-col gap-2">
+        <InputForm Label="Loại sản phẩm" Type="Input" field="level0" />
+        {Type === 'update' ? (
+          <>
+            {' '}
+            <div className="border rounded-xl border-black">
+              <div className="p-2 flex flex-col">
+                <div className="grid grid-cols-7 mt-2">
+                  <div>Các loại sản phẩm:</div>
+                  <div className="col-span-6">
+                    <div className=" pl-2 py-2 flex flex-wrap gap-2">
+                      {FormData?.level1?.length > 0 && (
+                        <>
+                          {FormData?.level1?.map((item: any, idx: number) => (
+                            <div
+                              key={idx}
+                              className="border bg-slate-200 rounded-full relative"
+                            >
+                              <div className="w-max py-1 px-3">{item}</div>
+                              <div
+                                className="bg-white p-1 absolute rounded-full w-max -top-2 -right-2 cursor-pointer"
+                                onClick={() => HandleChangeLevel1(item)}
+                              >
+                                <RxCross2 />
+                              </div>
+                            </div>
+                          ))}
+                        </>
+                      )}
+                    </div>
+                  </div>
+                </div>
+                <div className="mt-2">
+                  <div className="grid grid-cols-8  items-center  w-full justify-between  ">
+                    <div className="col-span-2 flex items-center gap-2 ">
+                      <p>Thêm loại sản phẩm</p>
+                    </div>
+                    <div className="px-4 py-1 border flex justify-between items-center   bg-white rounded-lg w-full col-span-6">
+                      <input
+                        type="text"
+                        className=" outline-none w-full"
+                        value={Level1}
+                        onChange={(e) => setLevel1(e.target.value)}
+                      />
+                      <div
+                        className="text-[20px]  cursor-pointer duration-300 hover:text-blue-500"
+                        onClick={() => {
+                          if (FormData.level1 === undefined) {
+                            setFormData({ ...FormData, level1: [Level1] });
+                            setLevel1('');
+                          } else {
+                            setFormData({
+                              ...FormData,
+                              level1: [...FormData?.level1, Level1],
+                            });
+                            setLevel1('');
+                          }
+                        }}
+                      >
+                        <MdUpload />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </>
+        ) : (
+          <></>
+        )}
+        <div className="flex w-full justify-end ">
+          <div
+            className="bg-blue-500 hover:bg-blue-700 duration-300 text-white p-2 rounded-md cursor-pointer"
+            onClick={() => HandleSubmit()}
+          >
+            Tải lên
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ProductCategoryForm;

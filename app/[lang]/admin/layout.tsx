@@ -1,18 +1,25 @@
 'use client';
+
 import { useAuth } from '@context/AuthProviders';
-import { useRouter } from 'next/navigation';
-import React from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import React, { useEffect } from 'react';
 
-interface DashboardLayout {
-  children: React.ReactNode;
-}
-
-const DashboardLayout = ({ children }: DashboardLayout) => {
-  const { verify } = useAuth();
+const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
+  const { setCurrentUser, setUserKey } = useAuth();
+  const verify = true;
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const searchValue: any = searchParams.get('key');
+  const strCurrentUser = atob(searchValue);
+  const CurrentUser = JSON.parse(strCurrentUser);
+  useEffect(() => {
+    setCurrentUser(CurrentUser);
+    setUserKey(searchValue);
+  }, []);
   if (!verify) {
-    const router = useRouter();
     return router.push('/');
   }
+
   return <div>{children}</div>;
 };
 
