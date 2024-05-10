@@ -33,7 +33,8 @@ const Header = ({ dict, Key }: { dict: any; Key: string }) => {
   const [isOpenDrawer, setIsOpenDrawer] = useState<boolean>(false);
   const [search, setSearch] = useState<string>('');
   const [searchRs, setSearchRs] = useState<AdminPageHeaderItemsProps[]>([]);
-  const { currentUser, HandleDashboardNavigate } = useAuth();
+  const { currentUser, HandleDashboardNavigate, setVerify } = useAuth();
+  const { HandleNavigate } = useStateProvider();
   useEffect(() => {
     const sort = dict.DashboardPage.Header?.filter(
       (product: AdminPageHeaderItemsProps) =>
@@ -43,6 +44,14 @@ const Header = ({ dict, Key }: { dict: any; Key: string }) => {
     setSearchRs(sort);
   }, [search]);
 
+  const DashboardHeader =
+    currentUser.role === 'Standard'
+      ? dict.DashboardPage.StandardHeader
+      : currentUser.role === 'Pro'
+      ? dict.DashboardPage.ProHeader
+      : currentUser.role === 'Advance'
+      ? dict.DashboardPage.AdvanceHeader
+      : currentUser.role === 'Admin' && dict.DashboardPage.AdminHeader;
   return (
     <div className="z-50 relative">
       <div className="border-b shadow-xl  h-[65px] p:hidden d:grid grid-cols-4 fixed top-0 w-full bg-white ">
@@ -60,7 +69,7 @@ const Header = ({ dict, Key }: { dict: any; Key: string }) => {
           </div>
         </div>
         <div className="col-span-2 flex justify-center items-center ">
-          {dict.DashboardPage.Header.map(
+          {DashboardHeader.map(
             (item: AdminPageHeaderItemsProps, index: number) => {
               const Icon = DashboardMapping[item.icon];
 
@@ -68,7 +77,9 @@ const Header = ({ dict, Key }: { dict: any; Key: string }) => {
                 <div className="group relative" key={index}>
                   <div
                     onClick={() =>
-                      HandleDashboardNavigate(`/admin?tab=${item.value}`)
+                      HandleDashboardNavigate(
+                        `/admin?tab=${item.value}&key=${Key}`
+                      )
                     }
                     className="flex cursor-pointer gap-2 items-center group font-light hover:bg-gray-100 h-max py-2 px-5  rounded-md"
                   >
@@ -165,8 +176,8 @@ const Header = ({ dict, Key }: { dict: any; Key: string }) => {
                   <div className="text-red-500">
                     <div
                       onClick={() => {
-                        localStorage.clear();
-                        HandleDashboardNavigate(`/login`);
+                        setVerify(false);
+                        HandleNavigate('/');
                       }}
                       className="flex gap-2 items-center font-light hover:bg-gray-100 h-max py-2 px-5 text-[14px]  rounded-md cursor-pointer"
                     >

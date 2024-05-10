@@ -1,6 +1,5 @@
 'use client';
 
-import { HeaderItems } from '@assets/items';
 import HandleKeyword from '@components/dashboard/items/Handle/Keyword';
 import InputForm from '@components/dashboard/items/UI/InputForm';
 import { useStateProvider } from '@context/StateProvider';
@@ -16,15 +15,15 @@ export const BasicSEOForm = ({
   setIsOpen: (isOpen: boolean) => void;
 }) => {
   const router = useRouter();
-  const { FormData } = useStateProvider();
+  const { FormData, setIsLoading } = useStateProvider();
   const { currentUser } = useAuth();
   const HandleSubmit = async () => {
-    await updateOne(
-      currentUser.firebaseConfig,
-      'Config',
-      'SEOconfig',
-      FormData
-    ).then(() => {
+    setIsLoading(2000);
+
+    await updateOne(currentUser.firebaseConfig, 'Config', 'SEOconfig', {
+      ...FormData,
+      id: 'SEOconfig',
+    }).then(() => {
       setIsOpen(false);
       router.refresh();
     });
@@ -33,9 +32,10 @@ export const BasicSEOForm = ({
     <div className="p-2 flex flex-col gap-2">
       <InputForm Label="Tiêu đề trang" Type="Input" field="Title" />
       <InputForm Label="Thẻ mô tả" Type="Input" field="Description" />
+      <InputForm Label="Thẻ từ khóa" Type="Input" field="Keyword" />
+
       <InputForm Label="Favicon" Type="Upload" field="Favicon" />
 
-      <HandleKeyword />
       <div className="flex w-full justify-end">
         <div
           className="bg-blue-500 hover:bg-blue-700 duration-300 text-white p-2 rounded-md cursor-pointer"
@@ -116,9 +116,6 @@ export const AdvanceSEOForm = ({
       value: 'Bingbot',
     },
   ];
-  if (HeaderItems[0].label === 'Trang Chủ') {
-    HeaderItems.shift();
-  }
 
   const FrequencyItems = [
     {
@@ -171,7 +168,7 @@ export const AdvanceSEOForm = ({
               Label="Chọn tuyến đường"
               Type="Select"
               field="subUrl"
-              Option={HeaderItems}
+              // Option={HeaderItems}
             />
             {FormData?.subUrl && (
               <div className=" rounded-lg border border-red-300 my-3">

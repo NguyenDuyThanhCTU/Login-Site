@@ -4,21 +4,23 @@ import React, { useEffect, useState } from 'react';
 import { PiCardsLight } from 'react-icons/pi';
 import { useStateProvider } from '@context/StateProvider';
 import { MdSmartDisplay } from 'react-icons/md';
-import CRUDButton from '@components/items/admin/UI/CRUDButton';
-import { CollectionProps } from '@assets/TypeProps';
+
 import { ImageCollectionBox, VideoCollectionBox } from './Collection/Display';
 import CollectionForm from './Collection/CollectionHandle';
+import { CollectionProps } from '@assets/props';
+import CRUDButton from '../items/UI/CRUDButton';
+import { getHighestNumber } from '../items/Handle/Handle';
 
 interface CollectionsProps {
   ImageFiltered: CollectionProps[];
   VideoFiltered: CollectionProps[];
-  collectionLength: number;
+  Data: CollectionProps[];
 }
 
 const Collection = ({
   ImageFiltered,
   VideoFiltered,
-  collectionLength,
+  Data,
 }: CollectionsProps) => {
   const [isImage, setIsImage] = useState<CollectionProps[]>([]);
   const [isVideo, setIsVideo] = useState<CollectionProps[]>([]);
@@ -68,8 +70,8 @@ const Collection = ({
 
   const HandleOpenForm = (id: string) => {
     setIsUpdateModel(true);
-    const sort = isVideo?.filter((item) => item.id === id);
-    setFormData(sort[0]);
+    const sort = isVideo?.find((item) => item.id === id);
+    setFormData(sort);
   };
 
   return (
@@ -144,7 +146,7 @@ const Collection = ({
         afterClose={() => setFormData({})}
       >
         <CollectionForm
-          collectionLength={collectionLength}
+          collectionLength={Data === undefined ? 0 : getHighestNumber(Data) + 1}
           setIsOpen={setIsAddModal}
         />
       </Modal>
@@ -157,6 +159,7 @@ const Collection = ({
         afterClose={() => setFormData({})}
       >
         <CollectionForm
+          Type="update"
           collectionLength={FormData?.stt}
           setIsOpen={setIsUpdateModel}
         />

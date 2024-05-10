@@ -12,6 +12,7 @@ import FileSaver from '../items/Handle/FileSaver';
 import Search from '../items/UI/Search';
 import SortTable from '../items/UI/SortTable';
 import { AccountProps } from '@assets/props';
+import { getHighestNumber } from '../items/Handle/Handle';
 
 const General = ({ Data }: { Data: AccountProps[] }) => {
   const [isOpenAddModal, setIsOpenAddModal] = useState(false);
@@ -69,9 +70,7 @@ const General = ({ Data }: { Data: AccountProps[] }) => {
         afterClose={() => setFormData({})}
       >
         <AccountHandle
-          accountLength={
-            Data?.length === 0 || Data === undefined ? 0 : Data[0]?.stt + 1
-          }
+          accountLength={Data === undefined ? 0 : getHighestNumber(Data) + 1}
           Data={Data}
           setIsOpen={setIsOpenAddModal}
         />

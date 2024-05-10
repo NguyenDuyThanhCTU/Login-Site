@@ -1,7 +1,8 @@
 'use client';
 
-import { SocialMediaDashboardProps } from '@assets/TypeProps';
-import { updateOne } from '@lib/api';
+import { SocialMediaDashboardProps } from '@assets/props';
+import { updateOne } from '@config/api/api';
+import { useAuth } from '@context/AuthProviders';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 interface IconProps {
@@ -24,16 +25,18 @@ const SocialMediaCard = ({
 }: SocialMediaCardProps) => {
   const [isSelected, setSelected] = useState<number>();
   const [isSocialMedia, setSocialMedia] = useState<string>('');
+  const { currentUser } = useAuth();
   const router = useRouter();
   const HandleUpdate = () => {
     const Data = {
       [field]: isSocialMedia,
     };
-    updateOne('Config', 'SocialMedia', Data).then(() => {
-      router.refresh();
-    });
+    updateOne(currentUser.firebaseConfig, 'Config', 'SocialMedia', Data).then(
+      () => {
+        router.refresh();
+      }
+    );
   };
-
   return (
     <div className="py-3 flex flex-col gap-5 bg-slate-200 rounded-md justify-between shadow-xl cursor-pointer hover:shadow-slate-600 duration-300">
       <div className="">
@@ -56,7 +59,7 @@ const SocialMediaCard = ({
         <div className="" onClick={() => setSelected(index)}>
           <input
             type="text"
-            value={isSocialMedia ? isSocialMedia : value}
+            value={isSocialMedia ? isSocialMedia : value[field]}
             className="outline-none text-black py-2 px-3 rounded-md w-full"
             onChange={(e) => setSocialMedia(e.target.value)}
           />

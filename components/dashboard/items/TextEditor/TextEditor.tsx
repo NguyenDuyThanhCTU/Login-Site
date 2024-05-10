@@ -8,9 +8,16 @@ interface Props {
   onChange: (value: string) => void;
   Form?: any;
   Field?: any;
+  storageBucket: string;
 }
 
-const TextEditor = ({ initialValue, onChange, Form, Field }: Props) => {
+const TextEditor = ({
+  initialValue,
+  onChange,
+  Form,
+  Field,
+  storageBucket,
+}: Props) => {
   const [editorData, setEditorData] = useState(initialValue);
   const editorRef = useRef<any>();
   const [editorLoaded, setEditorLoaded] = useState(false);
@@ -33,7 +40,7 @@ const TextEditor = ({ initialValue, onChange, Form, Field }: Props) => {
       upload: () => {
         return loader.file
           .then((file: any) => {
-            return uploadImage(file, 'editor')
+            return uploadImage(file, 'editor', storageBucket)
               .then((uploadedFileUrl: any) => {
                 return {
                   default: uploadedFileUrl,
@@ -62,19 +69,24 @@ const TextEditor = ({ initialValue, onChange, Form, Field }: Props) => {
 
   return (
     <div>
-      {editorLoaded ? (
-        <CKEditor
-          editor={Editor}
-          config={{ extraPlugins: [uploadPlugin] }}
-          data={editorData}
-          onChange={(event: any, editor: any) => {
-            const data = editor.getData();
-            setEditorData(data);
-            onChange({ ...Form, [Field]: data });
-          }}
-        />
-      ) : (
-        'loading...'
+      {typeof window !== 'undefined' && (
+        <>
+          {editorLoaded ? (
+            <CKEditor
+              editor={Editor}
+              config={{ extraPlugins: [uploadPlugin] }}
+              data={editorData}
+              onChange={(event: any, editor: any) => {
+                const data = editor.getData();
+                console.log(data);
+                setEditorData(data);
+                onChange({ ...Form, [Field]: data });
+              }}
+            />
+          ) : (
+            'loading...'
+          )}
+        </>
       )}
     </div>
   );

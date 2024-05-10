@@ -11,16 +11,16 @@ import React from 'react';
 
 const Handle = ({ setIsOpen }: { setIsOpen: (isOpen: boolean) => void }) => {
   const router = useRouter();
-  const { setFormData, FormData } = useStateProvider();
+  const { setFormData, FormData, setIsLoading } = useStateProvider();
   const { currentUser } = useAuth();
 
   const HandleSubmit = async () => {
-    await updateOne(
-      currentUser.firebaseConfig,
-      'Config',
-      'contact',
-      FormData
-    ).then(() => {
+    setIsLoading(2000);
+
+    await updateOne(currentUser.firebaseConfig, 'Config', 'contact', {
+      ...FormData,
+      id: 'contact',
+    }).then(() => {
       setIsOpen(false);
       router.refresh();
     });

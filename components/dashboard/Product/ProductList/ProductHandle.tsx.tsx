@@ -9,7 +9,7 @@ import slugify from 'slugify';
 import Display from './Tab/Display';
 import { DynamicForm, SEOForm, StaticForm } from './Tab/Form';
 import { CategoryProps } from '@assets/props';
-import { insertAndCustomizeId } from '@config/api/api';
+import { insertAndCustomizeId, updateOne } from '@config/api/api';
 import { useAuth } from '@context/AuthProviders';
 
 interface ProductHandleProps {
@@ -29,6 +29,7 @@ const ProductHandle = ({
   const { FormData, setFormData } = useStateProvider();
   const router = useRouter();
   const { currentUser } = useAuth();
+
   useEffect(() => {
     const randomText = Math.floor(Math.random() * 100000000000);
     const headUrl = slugify(`${FormData?.title}-p${randomText}.html`, {
@@ -56,19 +57,26 @@ const ProductHandle = ({
         lower: true,
         locale: 'vi',
       });
-      let Data = { ...FormData, level0: level0 };
-
-      await insertAndCustomizeId(
-        currentUser.firebaseConfig,
-        'Products',
-        Data,
-        `${productLength ? 100000000000 + productLength : 100000000000}`
-      ).then(() => {
-        setIsOpen(false);
-        router.refresh();
-      });
-
-      router.refresh();
+      if (Type === 'update') {
+        let Data = { ...FormData, level0: level0 };
+        updateOne(currentUser.firebaseConfig, 'Products', Data.id, Data).then(
+          () => {
+            setIsOpen(false);
+            router.refresh();
+          }
+        );
+      } else {
+        let Data = { ...FormData, level0: level0 };
+        insertAndCustomizeId(
+          currentUser.firebaseConfig,
+          'Products',
+          Data,
+          `${productLength ? 100000000000 + productLength : 100000000000}`
+        ).then(() => {
+          setIsOpen(false);
+          router.refresh();
+        });
+      }
     }
   };
 
@@ -126,7 +134,7 @@ const ProductHandle = ({
             className="bg-blue-500 hover:bg-blue-700 duration-300 cursor-pointer text-white p-2 rounded-md"
             onClick={() => HandleSubmit()}
           >
-            Cập nhật
+            {Type === 'update' ? ' Cập nhật' : 'Thêm mới'}
           </div>
         </div>
       </>

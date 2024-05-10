@@ -1,9 +1,9 @@
 'use client';
 import React from 'react';
 
-import { IconMapping } from '@assets/item';
-import { SocialMediaDashboardProps, SocialMediaProps } from '@assets/TypeProps';
 import SocialMediaCard from './Card';
+import { SocialMediaDashboardProps, SocialMediaProps } from '@assets/props';
+import { IconSocialMediaMapping } from '@assets/items';
 
 const SocialMedia = ({ Data }: { Data: SocialMediaProps }) => {
   const SocialMediaDashboard: SocialMediaDashboardProps[] = [
@@ -82,7 +82,7 @@ const SocialMedia = ({ Data }: { Data: SocialMediaProps }) => {
         </div>
         <div className="p-5 grid d:grid-cols-4 gap-10 p:grid-cols-1  mt-5 ">
           {SocialMediaDashboard.map((items: SocialMediaDashboardProps, idx) => {
-            let Icon = IconMapping[items.icon];
+            let Icon = IconSocialMediaMapping[items.icon];
             return (
               <div key={idx}>
                 <SocialMediaCard

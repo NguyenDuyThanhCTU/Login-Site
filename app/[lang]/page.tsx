@@ -19,8 +19,7 @@ const LoginPage = async ({
   params: { lang: 'vi' | 'cn' | 'en' };
 }) => {
   const dict = await getDictionary(params.lang);
-  const Accounts = await find(firebaseConfig, 'Accounts');
-
+  const Accounts = await find(firebaseConfig, 'Accounts', true);
   return (
     <div className="w-screen h-screen relative">
       <ParticlesCustom />

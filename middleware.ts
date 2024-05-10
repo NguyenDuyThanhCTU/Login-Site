@@ -19,18 +19,31 @@ function getLocale(request: NextRequest): string | undefined {
 
 export function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
+  const searchTab = request.nextUrl.searchParams.get('tab');
+  const searchKey = request.nextUrl.searchParams.get('key');
+
   const pathnameIsMissingLocale = i18n.locales.every(
     (locale) => !pathname.startsWith(`/${locale}/`) && pathname !== `/${locale}`
   );
-
   if (pathnameIsMissingLocale) {
     const locale = getLocale(request);
-    return NextResponse.redirect(
-      new URL(
-        `/${locale}${pathname.startsWith('/') ? '' : '/'}${pathname}`,
-        request.url
-      )
-    );
+    if (searchTab && searchKey) {
+      return NextResponse.redirect(
+        new URL(
+          `/${locale}${
+            pathname.startsWith('/') ? '' : '/'
+          }${pathname}?tab=${searchTab}&key=${searchKey}`,
+          request.url
+        )
+      );
+    } else {
+      return NextResponse.redirect(
+        new URL(
+          `/${locale}${pathname.startsWith('/') ? '' : '/'}${pathname}`,
+          request.url
+        )
+      );
+    }
   }
 }
 export const config = {

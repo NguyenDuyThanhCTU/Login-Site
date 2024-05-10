@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import React from 'react';
 import { useAuth } from '@context/AuthProviders';
 import InputForm from '@components/dashboard/items/UI/InputForm';
-import { HeaderItems } from '@assets/items';
+// import { HeaderItems } from '@assets/items';
 
 interface HandleFormProps {
   setIsOpen: (isOpen: boolean) => void;
@@ -15,31 +15,22 @@ interface HandleFormProps {
 
 export const Handle404Form = ({ setIsOpen }: HandleFormProps) => {
   const router = useRouter();
-  const { FormData } = useStateProvider();
+  const { FormData, setIsLoading } = useStateProvider();
   const { currentUser } = useAuth();
   const HandleSubmit = async () => {
-    await updateOne(
-      currentUser.firebaseConfig,
-      'Config',
-      'information',
-      FormData
-    ).then(() => {
+    setIsLoading(2000);
+    await updateOne(currentUser.firebaseConfig, 'Config', 'information', {
+      ...FormData,
+      id: 'information',
+    }).then(() => {
       setIsOpen(false);
       router.refresh();
     });
   };
-
   return (
     <div>
       <div className="p-2 flex flex-col gap-2">
-        <div className="">
-          <InputForm
-            Label="Chuyển hướng"
-            Type="Radio"
-            Option={HeaderItems}
-            field={'NotFoundNavigate'}
-          />
-        </div>
+        <div className=""></div>
 
         <InputForm Label="Ảnh hiển thị" Type="Upload" field="ImageNotFound" />
 
@@ -64,10 +55,12 @@ export const Handle404Form = ({ setIsOpen }: HandleFormProps) => {
 
 export const HandleLogoForm = ({ setIsOpen, Logo }: HandleFormProps) => {
   const router = useRouter();
-  const { FormData } = useStateProvider();
+  const { FormData, setIsLoading } = useStateProvider();
   const { currentUser } = useAuth();
 
   const HandleSubmit = async () => {
+    setIsLoading(2000);
+
     await updateOne(
       currentUser.firebaseConfig,
       'Config',
@@ -113,10 +106,12 @@ export const HandleLogoForm = ({ setIsOpen, Logo }: HandleFormProps) => {
 
 export const HandleFacebookForm = ({ setIsOpen }: HandleFormProps) => {
   const router = useRouter();
-  const { FormData } = useStateProvider();
+  const { FormData, setIsLoading } = useStateProvider();
   const { currentUser } = useAuth();
 
   const HandleSubmit = async () => {
+    setIsLoading(2000);
+
     await updateOne(
       currentUser.firebaseConfig,
       'Config',
@@ -154,10 +149,12 @@ export const HandleFacebookForm = ({ setIsOpen }: HandleFormProps) => {
 
 export const HandleTwitterForm = ({ setIsOpen }: HandleFormProps) => {
   const router = useRouter();
-  const { FormData } = useStateProvider();
+  const { FormData, setIsLoading } = useStateProvider();
   const { currentUser } = useAuth();
 
   const HandleSubmit = async () => {
+    setIsLoading(2000);
+
     await updateOne(
       currentUser.firebaseConfig,
       'Config',
@@ -195,10 +192,12 @@ export const HandleTwitterForm = ({ setIsOpen }: HandleFormProps) => {
 
 export const HandleGoogleForm = ({ setIsOpen }: HandleFormProps) => {
   const router = useRouter();
-  const { FormData } = useStateProvider();
+  const { FormData, setIsLoading } = useStateProvider();
   const { currentUser } = useAuth();
 
   const HandleSubmit = async () => {
+    setIsLoading(2000);
+
     await updateOne(
       currentUser.firebaseConfig,
       'Config',

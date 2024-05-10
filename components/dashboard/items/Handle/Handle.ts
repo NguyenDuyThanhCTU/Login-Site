@@ -1,24 +1,35 @@
 'use client';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { getStorage } from 'firebase/storage';
+import { getApp } from 'firebase/app';
 
 import { initializeApp } from 'firebase/app';
 import { initializeFirestore } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import { CiMail } from 'react-icons/ci';
-import { AccountProps } from '@assets/props';
+import { AccountProps, FirebaseConfigProps } from '@assets/props';
+import { useSearchParams } from 'next/navigation';
 
-const CurrentUserStorage: any = localStorage.getItem('currentUser');
-const CurrentUser: AccountProps = JSON.parse(CurrentUserStorage);
+// export const FirebaseHandle = () => {
+//   const searchParams = useSearchParams();
+//   const searchValue: any = searchParams.get('key');
+//   const strCurrentUser = atob(searchValue);
+//   const CurrentUser = JSON.parse(strCurrentUser);
 
-const app = initializeApp(CurrentUser.firebaseConfig);
-export const db = initializeFirestore(app, {
-  experimentalForceLongPolling: true,
-});
+//   const app = initializeApp(CurrentUser.firebaseConfig);
+//   const db = initializeFirestore(app, {
+//     experimentalForceLongPolling: true,
+//   });
 
-export const auth = getAuth(app);
+//   const auth = getAuth(app);
+//   return { auth, db };
+// };
 
-export const uploadImage = async (fileOrEvent: any, locate: any) => {
+export const uploadImage = async (
+  fileOrEvent: any,
+  locate: any,
+  storageBucket: any
+) => {
   try {
     let selectImage;
     if (fileOrEvent.target && fileOrEvent.target.files) {
@@ -30,11 +41,13 @@ export const uploadImage = async (fileOrEvent: any, locate: any) => {
     const filetypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
 
     if (filetypes.includes(selectImage.type)) {
-      const storage = getStorage();
+      const firebaseApp = getApp();
+
+      const storage = getStorage(firebaseApp, storageBucket);
       let storageRef = ref(storage, `${locate}/${selectImage.name}`);
 
       const snapshot = await uploadBytes(storageRef, selectImage);
-      console.log('Uploaded a blob or file!');
+      // console.log(`${storage}, ${locate}/${selectImage.name}`);
 
       const url = await getDownloadURL(snapshot.ref);
 
@@ -92,4 +105,25 @@ export const extractSrc = (embedCode: string) => {
   // Trích xuất URL src từ đoạn mã nhúng
   const srcUrl = embedCode.substring(srcStart, srcEnd);
   return srcUrl;
+};
+
+export function getHighestNumber(dataArray: Array<any>) {
+  if (dataArray.length === 0) {
+    return null; // If the array is empty, return null
+  }
+
+  dataArray.sort((a, b) => b.stt - a.stt);
+
+  // The first element in the sorted array will have the largest sequenceNumber
+  return dataArray[0].stt;
+}
+
+// ramdom number and text 20 character function
+export const randomString = () => {
+  const chars =
+    '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  let result = '';
+  for (let i = 20; i > 0; --i)
+    result += chars[Math.floor(Math.random() * chars.length)];
+  return result;
 };

@@ -1,8 +1,8 @@
 'use client';
 import { AccountProps } from '@assets/props';
 import InputForm from '@components/dashboard/items/UI/InputForm';
-import { insertAndCustomizeId } from '@config/api/api';
-import { firebaseConfig } from '@config/firebase/firebase';
+import { insertAndCustomizeId, updateOne } from '@config/api/api';
+import { firebaseConfig } from '@config/firebase/Firebase';
 import { useStateProvider } from '@context/StateProvider';
 import { notification } from 'antd';
 import Image from 'next/image';
@@ -28,15 +28,19 @@ const AccountForm = ({
   );
   const RoleItems = [
     {
-      value: 'user',
-      label: 'Người dùng (Website giới thiệu)',
+      value: 'Standard',
+      label: 'Gói cơ bản',
     },
     {
-      value: 'user1',
-      label: 'Người Dùng (Website bán hàng)',
+      value: 'Pro',
+      label: 'Gói nâng cao',
     },
     {
-      value: 'admin',
+      value: 'Advance',
+      label: 'Gói cao cấp',
+    },
+    {
+      value: 'Admin',
       label: 'Quản trị viên',
     },
   ];
@@ -54,12 +58,7 @@ const AccountForm = ({
   const router = useRouter();
   const HandleSubmit = async () => {
     if (Type === 'update') {
-      await insertAndCustomizeId(
-        firebaseConfig,
-        'Accounts',
-        FormData,
-        `${accountLength ? 100000000000 + accountLength : 100000000000}`
-      ).then(() => {
+      updateOne(firebaseConfig, 'Accounts', FormData.id, FormData).then(() => {
         setIsOpen(false);
         router.refresh();
       });
@@ -180,6 +179,8 @@ const AccountForm = ({
           </div>
           <InputForm Label="Tên thành viên" Type="Input" field="name" />
           <InputForm Label="Tài khoản" Type="Input" field="username" />
+          <InputForm Label="Địa chỉ website" Type="Input" field="websiteUrl" />
+
           <InputForm Label="Mật khẩu" Type="Password" field="password" />
           <InputForm Label="Nhập lại mật khẩu" Type="Password" field="retype" />
           <InputForm

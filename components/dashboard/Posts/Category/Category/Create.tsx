@@ -1,5 +1,4 @@
 'use client';
-
 import InputForm from '@components/dashboard/items/UI/InputForm';
 import { insertAndCustomizeId, updateOne } from '@config/api/api';
 import { useAuth } from '@context/AuthProviders';
@@ -10,69 +9,63 @@ import React, { useState } from 'react';
 import { MdUpload } from 'react-icons/md';
 import { RxCross2 } from 'react-icons/rx';
 
-interface ProductCategoryFormProps {
+interface PostsCategoryFormProps {
   setIsOpen: (isOpen: boolean) => void;
   categoryLength: number;
   Type?: string;
 }
 
-const ProductCategoryForm = ({
+const PostsCategoryForm = ({
   setIsOpen,
   categoryLength,
   Type,
-}: ProductCategoryFormProps) => {
+}: PostsCategoryFormProps) => {
   const router = useRouter();
   const { currentUser } = useAuth();
+
   const [Level1, setLevel1] = useState<string>('');
   const { FormData, setFormData } = useStateProvider();
   const HandleChangeLevel1 = (item: number) => {
     let newLevel1 = FormData?.level1?.filter((i: any) => i !== item);
     setFormData({ ...FormData, level1: newLevel1 });
   };
+
   const HandleSubmit = async () => {
-    if (FormData?.level0 === undefined) {
-      notification.error({
-        message: 'Vui lòng chọn loại sản phẩm',
+    if (Type === 'update') {
+      updateOne(
+        currentUser.firebaseConfig,
+        'PostCategory',
+        FormData.id,
+        FormData
+      ).then(() => {
+        setIsOpen(false);
+        router.refresh();
       });
     } else {
-      if (Type === 'update') {
-        updateOne(
-          currentUser.firebaseConfig,
-          'ProductCategory',
-          FormData.id,
-          FormData
-        ).then(() => {
-          setIsOpen(false);
-          router.refresh();
-        });
-      } else {
-        const Data = {
+      insertAndCustomizeId(
+        currentUser.firebaseConfig,
+        'PostCategory',
+        {
           ...FormData,
           stt: categoryLength,
-          id: categoryLength ? 100000000000 + categoryLength : 100000000000,
-        };
-        insertAndCustomizeId(
-          currentUser.firebaseConfig,
-          'ProductCategory',
-          Data,
-          `${categoryLength ? 100000000000 + categoryLength : 100000000000}`
-        ).then(() => {
-          setIsOpen(false);
-          router.refresh();
-        });
-      }
+        },
+        `${`${categoryLength ? 100000000000 + categoryLength : 100000000000}`}`
+      ).then(() => {
+        setIsOpen(false);
+        router.refresh();
+      });
     }
   };
 
   return (
     <div>
       <div className="p-2 flex flex-col gap-2">
-        <InputForm Label="Loại sản phẩm" Type="Input" field="level0" />
+        <InputForm Label="Loại bài viết" Type="Input" field="level0" />
         {Type === 'update' && (
           <div className="border rounded-xl border-black">
             <div className="p-2 flex flex-col">
               <div className="grid grid-cols-7 mt-2">
-                <div>Các loại sản phẩm:</div>
+                <div>Danh sách loại bài viết:</div>
                 <div className="col-span-6">
                   <div className=" pl-2 py-2 flex flex-wrap gap-2">
                     {FormData?.level1?.length > 0 && (
@@ -99,7 +92,7 @@ const ProductCategoryForm = ({
               <div className="mt-2">
                 <div className="grid grid-cols-8  items-center  w-full justify-between  ">
                   <div className="col-span-2 flex items-center gap-2 ">
-                    <p>Thêm loại sản phẩm</p>
+                    <p>Thêm loại bài viết</p>
                   </div>
                   <div className="px-4 py-1 border flex justify-between items-center   bg-white rounded-lg w-full col-span-6">
                     <input
@@ -144,4 +137,4 @@ const ProductCategoryForm = ({
   );
 };
 
-export default ProductCategoryForm;
+export default PostsCategoryForm;

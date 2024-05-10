@@ -1,71 +1,45 @@
+'use client';
+
+import { Modal } from 'antd';
+import React, { useState } from 'react';
+
 import { useStateProvider } from '@context/StateProvider';
-import { Modal, Pagination, Popconfirm } from 'antd';
-import React, { useEffect, useState } from 'react';
-
-import Handle from './Category/Handle';
-
-import ProductCategoryBox from './Category/Display';
 import { CategoryProps } from '@assets/props';
-import Heading from '@components/dashboard/items/UI/Heading';
 import CRUDButton from '@components/dashboard/items/UI/CRUDButton';
+import PostsCategoryBox from './Display';
+import PostsCategoryForm from './Create';
 import { getHighestNumber } from '@components/dashboard/items/Handle/Handle';
+import Heading from '@components/dashboard/items/UI/Heading';
 
 const Category = ({ Data }: { Data: CategoryProps[] }) => {
   const [isAddModel, setIsAddModel] = useState<boolean>(false);
   const [isUpdateModel, setIsUpdateModel] = useState<boolean>(false);
-  const [currentPagination, setCurrentPagination] = useState<number>(1);
-  const [DataShow, setDataShow] = useState<CategoryProps[]>([]);
   const { setFormData, FormData } = useStateProvider();
 
-  const HandleSelectProduct = (id: string) => {
+  const HandleOpenForm = (id: string) => {
     setIsUpdateModel(true);
     const sort = Data?.filter((item: any) => item.id === id);
     setFormData(sort[0]);
   };
 
-  useEffect(() => {
-    if (currentPagination === 1) {
-      setDataShow(Data?.slice(0, 10));
-    } else {
-      setDataShow(
-        Data?.slice((currentPagination - 1) * 10, currentPagination * 10)
-      );
-    }
-  }, [currentPagination, Data]);
-
-  useEffect(() => {
-    setDataShow(Data?.slice(0, 10));
-  }, [Data]);
   return (
     <>
       <Heading
         description="  Tại đây, bạn có thể phân mục, thêm, chỉnh sửa hoặc các đối tượng trong
-        danh mục sản phẩm của mình"
-        title="Danh mục sản phẩm"
+        danh mục bài viết của mình"
+        title="Danh mục loại bài viết"
       />
       <div className="flex mt-5">
         <CRUDButton
           Clicked={setIsAddModel}
           Label="Thêm"
-          value="mục sản phẩm"
-          Style="hover:bg-emerald-900 bg-emerald-700"
+          value="loại bài viết"
+          Style="hover:bg-orange-900 bg-orange-700"
         />
       </div>
       <div className="font-LexendDeca font-light">
         <div className="mt-5 text-black">
-          <ProductCategoryBox
-            DataShow={DataShow}
-            setIsOpen={HandleSelectProduct}
-          />
-          <div className="w-full justify-end flex mt-4 mr-2">
-            {Data?.length > 10 && (
-              <Pagination
-                current={currentPagination}
-                onChange={(page) => setCurrentPagination(page)}
-                total={Data?.length}
-              />
-            )}
-          </div>
+          <PostsCategoryBox Data={Data} setIsOpen={HandleOpenForm} />
         </div>
       </div>
 
@@ -78,7 +52,7 @@ const Category = ({ Data }: { Data: CategoryProps[] }) => {
         destroyOnClose={true}
         afterClose={() => setFormData({})}
       >
-        <Handle
+        <PostsCategoryForm
           setIsOpen={setIsAddModel}
           categoryLength={Data === undefined ? 0 : getHighestNumber(Data) + 1}
         />
@@ -93,7 +67,7 @@ const Category = ({ Data }: { Data: CategoryProps[] }) => {
         afterClose={() => setFormData({})}
         onCancel={() => setIsUpdateModel(false)}
       >
-        <Handle
+        <PostsCategoryForm
           setIsOpen={setIsUpdateModel}
           Type="update"
           categoryLength={FormData?.stt}

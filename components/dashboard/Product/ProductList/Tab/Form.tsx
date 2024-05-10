@@ -19,16 +19,16 @@ interface lv1CategoryProps {
 export const StaticForm = ({ Category }: { Category: CategoryProps[] }) => {
   const [DataFilter, setDataFilter] = useState<lv1CategoryProps[]>([]);
   const { FormData, setFormData } = useStateProvider();
-
+  const { currentUser } = useAuth();
   useEffect(() => {
-    let sortedData = Category?.filter(
+    let sortedData = Category?.find(
       (item: any) => item.level0 === FormData?.level0
     );
 
-    let formattedArray = sortedData?.map((item: any) => ({
-      label: item.level1,
+    let formattedArray: any = sortedData?.level1?.map((item) => ({
+      label: item,
 
-      value: slugify(item?.level1 ? item?.level1 : '', {
+      value: slugify(item ? item : '', {
         lower: true,
         locale: 'vi',
       }),
@@ -40,7 +40,11 @@ export const StaticForm = ({ Category }: { Category: CategoryProps[] }) => {
     options.onSuccess({});
 
     try {
-      const url = await uploadImage(options.file, 'avatar');
+      const url = await uploadImage(
+        options.file,
+        'avatar',
+        currentUser.firebaseConfig
+      );
       const newUrl = {
         uid: options.file.uid,
         url: url,
@@ -208,7 +212,7 @@ export const SEOForm = () => {
             {FormData?.title === undefined ? <>N/A</> : FormData?.title}
           </h2>
           <p className="text-[#006621]">
-            {currentUser.website}/{FormData?.url}
+            {/* {currentUser.website}/{FormData?.url} */}
           </p>
           <p className="">
             {FormData?.description === undefined

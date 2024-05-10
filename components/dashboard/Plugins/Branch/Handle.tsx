@@ -1,8 +1,9 @@
 'use client';
-import { extractSrc } from '@components/items/admin/Handle/Handle';
-import InputForm from '@components/items/admin/UI/InputForm';
+import { extractSrc } from '@components/dashboard/items/Handle/Handle';
+import InputForm from '@components/dashboard/items/UI/InputForm';
+import { insertAndCustomizeId } from '@config/api/api';
+import { useAuth } from '@context/AuthProviders';
 import { useStateProvider } from '@context/StateProvider';
-import { insertAndCustomizeId, updateOne } from '@lib/api';
 import { notification } from 'antd';
 import { useRouter } from 'next/navigation';
 import React from 'react';
@@ -10,6 +11,7 @@ import React from 'react';
 const Handle = ({ setIsOpen, branchLength }: any) => {
   const router = useRouter();
   const { FormData, setFormData } = useStateProvider();
+  const { currentUser } = useAuth();
   const HandleCheckGoogleMap = () => {
     const url = extractSrc(FormData?.GoogleMap);
     setFormData({ ...FormData, MapUrl: url });
@@ -28,6 +30,7 @@ const Handle = ({ setIsOpen, branchLength }: any) => {
     } else {
       const Data = { ...FormData, stt: branchLength };
       await insertAndCustomizeId(
+        currentUser.firebaseConfig,
         'Branches',
         Data,
         `${branchLength ? 100000000000 + branchLength : 100000000000}`

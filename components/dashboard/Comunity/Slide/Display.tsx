@@ -1,6 +1,6 @@
-import { SlideProps } from '@assets/TypeProps';
-import { WebsiteUrl } from '@assets/item';
-import { deleteOne } from '@lib/api';
+import { SlideProps } from '@assets/props';
+import { deleteOne } from '@config/api/api';
+import { useAuth } from '@context/AuthProviders';
 import { Popconfirm } from 'antd';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -15,9 +15,9 @@ interface SlideBoxProps {
 
 const SlideBox = ({ Data, setIsOpen }: SlideBoxProps) => {
   const router = useRouter();
-
+  const { currentUser, websiteUrl } = useAuth();
   const HandleDelete = async (id: string) => {
-    deleteOne('Slides', id).then(() => {
+    deleteOne(currentUser.firebaseConfig, 'Slides', id).then(() => {
       router.refresh();
     });
   };
@@ -76,7 +76,7 @@ const SlideBox = ({ Data, setIsOpen }: SlideBoxProps) => {
                       }/${item.url}`
                     )
                   }
-                >{`${WebsiteUrl}/${
+                >{`${websiteUrl}/${
                   item.type === 'Sản phẩm'
                     ? 'chi-tiet-san-pham'
                     : item.type === 'Bài viết' && 'chi-tiet-bai-viet'

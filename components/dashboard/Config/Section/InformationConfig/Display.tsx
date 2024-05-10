@@ -1,6 +1,6 @@
-import { HeaderItems, WebsiteUrl } from '@assets/items';
 import { ContactProps, InformationProps } from '@assets/props';
 import HeaderBox from '@components/dashboard/items/UI/HeaderBox';
+import { useStateProvider } from '@context/StateProvider';
 import Image from 'next/image';
 import { FaLink } from 'react-icons/fa';
 import { FaXTwitter } from 'react-icons/fa6';
@@ -45,18 +45,6 @@ export const ErrorBox = ({ setIsOpen, Data }: BoxProps) => {
                 fill
                 className="object-contain "
               />
-            </div>
-          </div>
-          <div className="mt-2">
-            <div>
-              {' '}
-              Chuyển hướng:{' '}
-              {
-                HeaderItems.find(
-                  (item: any) =>
-                    item.value === informationData?.NotFoundNavigate
-                )?.label
-              }
             </div>
           </div>
         </div>
@@ -113,13 +101,17 @@ export const FacebookBox = ({ setIsOpen, Data }: BoxProps) => {
   const contactData: ContactProps = Data?.find(
     (item: any) => item.id === 'contact'
   );
+  const { setFormData } = useStateProvider();
 
   return (
     <div className="border shadow-sm bg-white rounded-md border-gray-200 h-max">
       <div className="p-4 flex flex-col gap-1">
         <HeaderBox
           Title="Giao diện Facebook"
-          ClickedProps={() => setIsOpen('Facebook')}
+          ClickedProps={() => {
+            setIsOpen('Facebook');
+            setFormData(informationData);
+          }}
           Description="Cách hiển thị giao diện hình ảnh, thông tin và tóm tắc website của bạn khi chia sẻ trên Facebook"
         />
         <div className="border mt-2 border-blue-500">
@@ -174,13 +166,17 @@ export const TwitterBox = ({ setIsOpen, Data }: BoxProps) => {
   const contactData: ContactProps = Data?.find(
     (item: any) => item.id === 'contact'
   );
+  const { setFormData } = useStateProvider();
 
   return (
     <div className="border shadow-sm bg-white rounded-md border-gray-200 h-max">
       <div className="p-4 flex flex-col gap-1">
         <HeaderBox
           Title="Giao diện Twitter"
-          ClickedProps={() => setIsOpen('Twitter')}
+          ClickedProps={() => {
+            setIsOpen('Twitter');
+            setFormData(informationData);
+          }}
           Description="Cách hiển thị giao diện hình ảnh, thông tin và tóm tắc website của bạn khi chia sẻ trên Twitter"
         />
         <div className="border mt-2 border-black">
@@ -231,13 +227,16 @@ export const EmbedBox = ({ setIsOpen, Data }: BoxProps) => {
   const informationData: InformationProps = Data?.find(
     (item: any) => item.id === 'information'
   );
-
+  const { setFormData } = useStateProvider();
   return (
     <div className="border shadow-sm bg-white rounded-md border-gray-200 ">
       <div className="p-4 flex flex-col gap-1">
         <HeaderBox
           Title="Tích hợp dịch vụ"
-          ClickedProps={() => setIsOpen('Google')}
+          ClickedProps={() => {
+            setIsOpen('Google');
+            setFormData(informationData);
+          }}
           Description="Chỉ sử dụng được chức năng thống kê sau khi tích hợp google Analytics"
         />
 

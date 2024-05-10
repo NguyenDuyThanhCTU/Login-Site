@@ -19,9 +19,9 @@ const SeoConfig = ({ Data }: { Data: Array<any> }) => {
     (item: any) => item.id === 'SEOconfig'
   );
   const HandleOpen = (type: string) => {
+    setFormData(SEOconfigData);
     if (type === 'Basic') {
       setIsOpenBasicSEO(true);
-      setFormData(Data);
     }
     if (type === 'Advance') {
       setIsOpenAdvanceSEO(true);

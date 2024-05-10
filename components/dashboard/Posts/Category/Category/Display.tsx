@@ -1,5 +1,4 @@
 import { CategoryProps } from '@assets/props';
-import IndexChanged from '@components/dashboard/items/UI/IndexChanged';
 import { deleteOne } from '@config/api/api';
 import { useAuth } from '@context/AuthProviders';
 import { Popconfirm } from 'antd';
@@ -7,22 +6,17 @@ import { useRouter } from 'next/navigation';
 import React from 'react';
 import { FaEdit } from 'react-icons/fa';
 import { MdDeleteForever } from 'react-icons/md';
-import { TbArrowsMoveVertical } from 'react-icons/tb';
 
-interface ProductCategoryBoxProps {
-  DataShow: CategoryProps[];
+interface PostsCategoryBoxProps {
+  Data: CategoryProps[];
   setIsOpen: (isOpen: string) => void;
 }
 
-const ProductCategoryBox = ({
-  DataShow,
-  setIsOpen,
-}: ProductCategoryBoxProps) => {
+const PostsCategoryBox = ({ Data, setIsOpen }: PostsCategoryBoxProps) => {
   const router = useRouter();
   const { currentUser } = useAuth();
-
   const HandleDelete = async (id: string) => {
-    deleteOne(currentUser.firebaseConfig, 'ProductCategory', id).then(() => {
+    deleteOne(currentUser.firebaseConfig, 'PostCategory', id).then(() => {
       router.refresh();
     });
   };
@@ -43,7 +37,7 @@ const ProductCategoryBox = ({
         ))}
       </div>
       <div className="h-[500px] overflow-y-auto scrollbar-thin ">
-        {DataShow?.map((item, idx) => {
+        {Data?.map((item, idx) => {
           return (
             <div
               className="grid cursor-default  grid-cols-4 border-b py-3  hover:bg-slate-200 items-center "
@@ -86,10 +80,10 @@ const ProductCategoryBox = ({
                     </div>
                   </Popconfirm>
                   {/* <IndexChanged
-                    currentData={item}
-                    Data={DataShow}
-                    CollectionName="ProductCategory"
-                  /> */}
+                  currentData={item}
+                  Data={DataShow}
+                  CollectionName="ProductCategory"
+                /> */}
                 </div>
               </div>
             </div>
@@ -100,4 +94,4 @@ const ProductCategoryBox = ({
   );
 };
 
-export default ProductCategoryBox;
+export default PostsCategoryBox;

@@ -1,6 +1,6 @@
 import { AccountProps } from '@assets/props';
 import { deleteOne } from '@config/api/api';
-import { firebaseConfig } from '@config/firebase/firebase';
+import { firebaseConfig } from '@config/firebase/Firebase';
 import { Popconfirm, Tooltip } from 'antd';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -99,16 +99,20 @@ const ListAccountBox = ({
                   )}
                 </div>
                 <div className="text-[30px] ml-6">
-                  {item.role === 'admin' ? (
-                    <Tooltip title="Người quản trị">
+                  {item.role === 'Standard' ? (
+                    <Tooltip title="Gói cơ bản">
                       <FaUserGear className="text-red-500" />
                     </Tooltip>
-                  ) : item.role === 'user' ? (
+                  ) : item.role === 'Pro' ? (
                     <Tooltip title="Người dùng (Website giới thiệu)">
                       <FaUserCheck className="text-blue-500" />
                     </Tooltip>
+                  ) : item.role === 'Advance' ? (
+                    <Tooltip title="Người dùng (website bán hàng)">
+                      <FaUserTag className="text-orange-500" />
+                    </Tooltip>
                   ) : (
-                    item.role === 'user1' && (
+                    item.role === 'Admin' && (
                       <Tooltip title="Người dùng (website bán hàng)">
                         <FaUserTag className="text-orange-500" />
                       </Tooltip>

@@ -1,7 +1,8 @@
-import { PostProps, ProductProps } from '@assets/TypeProps';
-import InputForm from '@components/items/admin/UI/InputForm';
+import { PostProps, ProductProps } from '@assets/props';
+import InputForm from '@components/dashboard/items/UI/InputForm';
+import { insertAndCustomizeId, updateOne } from '@config/api/api';
+import { useAuth } from '@context/AuthProviders';
 import { useStateProvider } from '@context/StateProvider';
-import { insertAndCustomizeId } from '@lib/api';
 import { notification } from 'antd';
 import { useRouter } from 'next/navigation';
 import React from 'react';
@@ -33,20 +34,33 @@ const SlidesForm = ({
     },
   ];
   const router = useRouter();
-
+  const { currentUser } = useAuth();
   const HandleSubmit = async () => {
     if (!FormData?.image) {
       notification.error({ message: 'Vui lòng chọn ảnh' });
     } else {
-      const Data = { ...FormData, stt: slideLength };
-      await insertAndCustomizeId(
-        'Slides',
-        Data,
-        `${slideLength ? 100000000000 + slideLength : 100000000000}`
-      ).then(() => {
-        setIsOpen(false);
-        router.refresh();
-      });
+      if (Type === 'update') {
+        updateOne(
+          currentUser.firebaseConfig,
+          'Slides',
+          FormData.id,
+          FormData
+        ).then(() => {
+          setIsOpen(false);
+          router.refresh();
+        });
+      } else {
+        const Data = { ...FormData, stt: slideLength };
+        await insertAndCustomizeId(
+          currentUser.firebaseConfig,
+          'Slides',
+          Data,
+          `${slideLength ? 100000000000 + slideLength : 100000000000}`
+        ).then(() => {
+          setIsOpen(false);
+          router.refresh();
+        });
+      }
     }
   };
 
@@ -60,20 +74,36 @@ const SlidesForm = ({
           Option={RadioItem}
         />
         {FormData?.type === 'Bài viết' ? (
-          <InputForm
-            Label="Bài viết liên kết"
-            Type="Select"
-            field="url"
-            Option={Posts}
-          />
-        ) : (
-          FormData?.type === 'Sản phẩm' && (
+          <>
             <InputForm
-              Label="Sản phẩm liên kết"
+              Label="Bài viết liên kết"
               Type="Select"
               field="url"
-              Option={Products}
+              Option={Posts}
             />
+            <InputForm
+              Label="Mô tả nhanh"
+              Type="Editor"
+              field="describe"
+              Option={Posts}
+            />
+          </>
+        ) : (
+          FormData?.type === 'Sản phẩm' && (
+            <>
+              <InputForm
+                Label="Sản phẩm liên kết"
+                Type="Select"
+                field="url"
+                Option={Products}
+              />
+              <InputForm
+                Label="Thông số sản phẩm"
+                Type="Editor"
+                field="describe"
+                Option={Posts}
+              />
+            </>
           )
         )}
         <InputForm Label="Slide giới thiệu" Type="Upload" field="image" />

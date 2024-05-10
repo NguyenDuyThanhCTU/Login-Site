@@ -1,7 +1,6 @@
 'use client';
 import InputForm from '@components/dashboard/items/UI/InputForm';
 import { updateOne } from '@config/api/api';
-import { firebaseConfig } from '@config/firebase/firebase';
 import { useAuth } from '@context/AuthProviders';
 import { useStateProvider } from '@context/StateProvider';
 import { useRouter } from 'next/navigation';
@@ -17,9 +16,13 @@ const AccountForm = ({ setIsOpen }: any) => {
   ];
   const router = useRouter();
   const HandleSubmit = () => {
-    updateOne(firebaseConfig, 'Accounts', currentUser.id, FormData).then(() => {
+    updateOne(
+      currentUser.firebaseConfig,
+      'Accounts',
+      currentUser.id,
+      FormData
+    ).then(() => {
       router.refresh();
-      router.push('/login');
     });
   };
   return (

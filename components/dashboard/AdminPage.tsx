@@ -10,13 +10,12 @@ import { RxCross2 } from 'react-icons/rx';
 import { FcGlobe, FcSmartphoneTablet } from 'react-icons/fc';
 import ReportCard from './items/UI/ReportCard';
 import { FunctionItem } from '@components/layout/dashboard/items/items';
-import { WebsiteUrl } from '@assets/items';
 import { PostProps } from '@assets/props';
 import { useAuth } from '@context/AuthProviders';
 
 const AdminPage = ({ Data }: { Data: PostProps }) => {
   const [isNotification, setIsNotification] = useState(true);
-  const { HandleDashboardNavigate } = useAuth();
+  const { HandleDashboardNavigate, websiteUrl } = useAuth();
   return (
     <>
       <div className="d:w-[1200px] p:mx-auto mx-auto flex flex-col gap-5">

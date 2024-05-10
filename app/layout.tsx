@@ -11,7 +11,7 @@ interface RootLayoutProps {
 export default async function RootLayout({ children }: RootLayoutProps) {
   return (
     <html>
-      <body className="font-LexendDeca font-light">
+      <body className="font-LexendDeca font-light ">
         <StateProvider>
           <Loading />
           <AuthProviders>{children}</AuthProviders>

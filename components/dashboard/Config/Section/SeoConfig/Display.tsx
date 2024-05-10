@@ -32,6 +32,11 @@ export const BasicSEOBox = ({ setIsOpen, Data }: SEOBoxProps) => {
       value: Data?.Description,
       tooltip: '',
     },
+    {
+      label: 'Thẻ từ khóa',
+      value: Data?.Keyword,
+      tooltip: '',
+    },
 
     {
       label: 'Favicon',
@@ -89,18 +94,6 @@ export const BasicSEOBox = ({ setIsOpen, Data }: SEOBoxProps) => {
             )}
           </div>
         ))}
-      </div>
-      <div className="grid grid-cols-7 mt-2">
-        <div className="py-2 pr-3 flex items-center gap-2 col-span-1 w-full justify-end">
-          Từ khóa SEO:
-        </div>
-        <div className="col-span-6 pl-2 py-2 flex flex-wrap gap-2">
-          {Data?.Keyword?.map((item: any, idx: number) => (
-            <div key={idx} className="border bg-slate-200 rounded-full">
-              <div className="w-max py-1 px-3">{item}</div>
-            </div>
-          ))}
-        </div>
       </div>
     </div>
   );

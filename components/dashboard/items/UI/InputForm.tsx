@@ -7,6 +7,7 @@ import { FaEyeSlash } from 'react-icons/fa';
 import { IoEyeSharp } from 'react-icons/io5';
 import ImageUploader from '../Handle/ImageUploader';
 import TextEditor from '../TextEditor/TextEditor';
+import { useAuth } from '@context/AuthProviders';
 
 interface InputFormProps {
   Label: string;
@@ -46,6 +47,7 @@ const InputForm = ({
 }: InputFormProps) => {
   const { FormData, setFormData } = useStateProvider();
   const [HiddenPassword, setHiddenPassword] = useState(false);
+  const { currentUser } = useAuth();
   return (
     <>
       <div>
@@ -62,7 +64,7 @@ const InputForm = ({
               </div>
               <div className="px-4 py-1   bg-white rounded-lg w-full col-span-6">
                 <ImageUploader
-                  PlaceHolder={PlaceHolder}
+                  storageBucket={currentUser.firebaseConfig.storageBucket}
                   setForm={setFormData}
                   Form={FormData}
                   Field={field}
@@ -82,14 +84,15 @@ const InputForm = ({
                 )}
               </div>
               <div className="px-4 py-1   bg-white rounded-lg w-full col-span-6">
-                <TextEditor
+                {/* <TextEditor
+                  storageBucket={currentUser.firebaseConfig.storageBucket}
                   initialValue={
                     FormData ? FormData[field] : '<p>Content...</p>'
                   }
                   onChange={setFormData}
                   Form={FormData}
                   Field={field}
-                />
+                /> */}
               </div>
             </div>
           </>
@@ -125,9 +128,13 @@ const InputForm = ({
                         <option key={idx} value={item.url}>
                           {item.title}
                         </option>
-                      ) : (
+                      ) : item.level0 !== undefined ? (
                         <option key={idx} value={item.url}>
                           {item.level0}
+                        </option>
+                      ) : (
+                        <option key={idx} value={item}>
+                          {item}
                         </option>
                       )}
                     </>

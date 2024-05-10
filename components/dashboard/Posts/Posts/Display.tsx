@@ -1,6 +1,6 @@
-import { PostCategory, PostProps } from '@assets/TypeProps';
-import { PostsTypeItems } from '@assets/item';
-import { deleteOne } from '@lib/api';
+import { CategoryProps, PostProps } from '@assets/props';
+import { deleteOne } from '@config/api/api';
+import { useAuth } from '@context/AuthProviders';
 import { Pagination, Popconfirm } from 'antd';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -17,14 +17,15 @@ interface PolicyBoxProps {
 interface PostListBoxProps {
   DataShow: PostProps[];
   Data: PostProps[];
-  Category: PostCategory[];
+  Category: CategoryProps[];
   setIsOpen: (id: string, type: string) => void;
 }
 
 export const PolicyBox = ({ Policy, setIsOpen }: PolicyBoxProps) => {
   const router = useRouter();
+  const { currentUser } = useAuth();
   const HandleDelete = async (id: string) => {
-    deleteOne('Posts', id).then(() => {
+    deleteOne(currentUser.firebaseConfig, 'Posts', id).then(() => {
       router.refresh();
     });
   };
@@ -95,9 +96,10 @@ export const PostListBox = ({
   setIsOpen,
 }: PostListBoxProps) => {
   const router = useRouter();
+  const { currentUser } = useAuth();
 
   const HandleDelete = async (id: string) => {
-    deleteOne('Posts', id).then(() => {
+    deleteOne(currentUser.firebaseConfig, 'Posts', id).then(() => {
       router.refresh();
     });
   };
@@ -148,23 +150,12 @@ flex  w-full
                   </div>
                   <div className="flex flex-col items-start text-[14px] ">
                     <p>
-                      {
-                        PostsTypeItems.find((i) => i.value === item.level0)
-                          ?.label
-                      }
+                      {item.level0}
                       <sup>(Cấp 1)</sup>
                     </p>
                     {item.level1 && (
                       <p className="border-l border-black ml-3 w-max pl-3">
-                        {
-                          Category?.find(
-                            (i) =>
-                              slugify(i.level1, {
-                                locale: 'vi',
-                                lower: true,
-                              }) === item.level1
-                          )?.level1
-                        }
+                        {item.level1}
                         <sup>(Cấp 2 )</sup>
                       </p>
                     )}

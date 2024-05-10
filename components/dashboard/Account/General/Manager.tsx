@@ -11,9 +11,9 @@ import { MdOutlineVerifiedUser } from 'react-icons/md';
 const ManagerBox = ({ Data }: { Data: AccountProps[] }) => {
   const countActive = Data?.filter((item) => item.status === 'active')?.length;
   const countBlock = Data?.filter((item) => item.status === 'block')?.length;
-  const countUser = Data?.filter((item) => item.role === 'user')?.length;
-  const countAdmin = Data?.filter((item) => item.role === 'admin')?.length;
-  const countEditor = Data?.filter((item) => item.role === 'user1')?.length;
+  const countUser = Data?.filter((item) => item.role === 'Pro')?.length;
+  const countAdmin = Data?.filter((item) => item.role === 'Advance')?.length;
+  const countEditor = Data?.filter((item) => item.role === 'Standard')?.length;
 
   const activepercent: any = ((countActive / Data?.length) * 100).toFixed(2);
   const blockpercent: any = ((countBlock / Data?.length) * 100).toFixed(2);

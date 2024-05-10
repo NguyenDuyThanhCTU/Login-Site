@@ -1,15 +1,16 @@
 'use client';
-import { Modal, Pagination, Popconfirm } from 'antd';
+import { Modal, Pagination } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useStateProvider } from '@context/StateProvider';
 import ProductHandle from './ProductList/ProductHandle.tsx';
 
 import ListProductBox from './ProductList/Display';
 import { CategoryProps, ProductProps } from '@assets/props.js';
-import FileSaver from '../items/Handle/FileSaver.tsx';
-import Search from '../items/UI/Search.tsx';
-import SortTable from '../items/UI/SortTable.tsx';
-import CRUDButton from '../items/UI/CRUDButton.tsx';
+import CRUDButton from '../items/UI/CRUDButton';
+import FileSaver from '../items/Handle/FileSaver';
+import Search from '../items/UI/Search';
+import SortTable from '../items/UI/SortTable';
+import { getHighestNumber } from '../items/Handle/Handle';
 
 interface ListProductProps {
   Category: CategoryProps[];
@@ -50,7 +51,7 @@ const ListProduct = ({ Category, Data }: ListProductProps) => {
   }, [DataFilter]);
 
   return (
-    <div className="border rounded-lg bg-white d:h-[90vh] p:h-auto">
+    <div className="border rounded-lg bg-white d:h-[90vh] p:h-auto ">
       <div className="p-4 font-normal text-gray-700">
         <div className="flex justify-between d:flex-row p:flex-col gap-5">
           <div className="flex items-center gap-5 d:flex-row p:flex-col">
@@ -96,10 +97,7 @@ const ListProduct = ({ Category, Data }: ListProductProps) => {
         <ProductHandle
           setIsOpen={setIsOpenAddModal}
           Category={Category}
-          productLength={
-            Data === undefined ? 0 : Data?.[Data.length - 1].stt + 1
-          }
-          Type="add"
+          productLength={Data === undefined ? 0 : getHighestNumber(Data) + 1}
         />
       </Modal>
 

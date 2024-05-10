@@ -1,10 +1,11 @@
 'use client';
 
-import { introductoryProps } from '@assets/TypeProps';
-import CRUDButton from '@components/items/admin/UI/CRUDButton';
-import InputForm from '@components/items/admin/UI/InputForm';
+import { introductoryProps } from '@assets/props';
+import CRUDButton from '@components/dashboard/items/UI/CRUDButton';
+import InputForm from '@components/dashboard/items/UI/InputForm';
+import { updateOne } from '@config/api/api';
+import { useAuth } from '@context/AuthProviders';
 import { useStateProvider } from '@context/StateProvider';
-import { updateOne } from '@lib/api';
 import { Modal } from 'antd';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -14,10 +15,12 @@ const PostIntroductory = ({ Data }: { Data: introductoryProps }) => {
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
   const { setFormData, FormData } = useStateProvider();
   const router = useRouter();
-
+  const { currentUser } = useAuth();
   const HandleSubmit = () => {
-    setFormData({ ...FormData, level0: 'Introductory' });
-    updateOne('Posts', 'introductory', FormData).then(() => {
+    updateOne(currentUser.firebaseConfig, 'Posts', 'introductory', {
+      ...FormData,
+      id: 'introductory',
+    }).then(() => {
       setIsOpenModal(false);
       router.refresh();
     });
@@ -28,7 +31,7 @@ const PostIntroductory = ({ Data }: { Data: introductoryProps }) => {
   }, [isOpenModal]);
 
   return (
-    <div className="w-full px-2 font-light gap-10 min-h-screen  bg-white py-10 ">
+    <div className="w-full px-2 font-light gap-10   bg-white py-10 ">
       <div className="flex items-center gap-5 ml-5 d:flex-row p:flex-col">
         <div>
           <h3 className="text-[30px] font-bold">Chỉnh sửa bài giới thiệu</h3>
@@ -45,45 +48,8 @@ const PostIntroductory = ({ Data }: { Data: introductoryProps }) => {
           />
         </div>
       </div>
-      <div className="  grid p:grid-cols-1 d:grid-cols-4 gap-5 mt-10">
-        <div className="col-span-3 border rounded-lg bg-slate-100 min-h-screen">
-          <div className="p-5">
-            <div
-              className="ck-content"
-              dangerouslySetInnerHTML={
-                Data?.content
-                  ? { __html: Data.content }
-                  : {
-                      __html: `<div><p>Chưa có dữ liệu để hiển thị</p> <p>Vui lòng chọn <strong> "Chỉnh sửa bài giới thiệu"  </strong> để cập nhật bài giới thiệu cho website!</p>  </div> `,
-                    }
-              }
-            ></div>
-          </div>
-        </div>
+      <div className=" flex flex-col  gap-5 mt-10">
         <div className="border shadow-sm bg-white rounded-md border-gray-200 ">
-          <div className="p-4 flex flex-col gap-1">
-            <div className="flex items-center gap-2 font-bold text-[18px]">
-              <p>Ảnh bìa:</p>
-            </div>
-            <div className="relative mt-2  h-[150px] w-[150px]">
-              {Data?.image !== undefined ? (
-                <Image
-                  src={
-                    Data?.image
-                      ? Data?.image
-                      : 'https://firebasestorage.googleapis.com/v0/b/garagebinh-46c14.appspot.com/o/icon-image-not-found-free-vector.jpg?alt=media&token=da958ab6-061d-473f-b72d-f5442cc7ca7c'
-                  }
-                  layout="fill"
-                  objectFit="cover"
-                  alt="Picture of the author"
-                />
-              ) : (
-                <div className="flex justify-center items-center h-full w-full">
-                  <p>Chưa có dữ liệu</p>
-                </div>
-              )}
-            </div>
-          </div>
           <div className="p-4 flex flex-col gap-1">
             <div className="flex items-center gap-2 font-bold text-[18px]">
               <p>Giới thiệu ngắn gọn:</p>
@@ -97,6 +63,37 @@ const PostIntroductory = ({ Data }: { Data: introductoryProps }) => {
                 )}
               </div>
             </div>
+          </div>
+          <div className="p-4 flex flex-col gap-1">
+            <div className="flex items-center gap-2 font-bold text-[18px]">
+              <p>Ảnh bìa:</p>
+            </div>
+            <div className="relative mt-2  h-[150px] w-[150px]">
+              <Image
+                src={
+                  Data?.image
+                    ? Data?.image
+                    : 'https://firebasestorage.googleapis.com/v0/b/garagebinh-46c14.appspot.com/o/icon-image-not-found-free-vector.jpg?alt=media&token=da958ab6-061d-473f-b72d-f5442cc7ca7c'
+                }
+                layout="fill"
+                objectFit="cover"
+                alt="Picture of the author"
+              />
+            </div>
+          </div>
+        </div>
+        <div className=" border rounded-lg bg-slate-100 ">
+          <div className="p-5">
+            <div
+              className="ck-content"
+              dangerouslySetInnerHTML={
+                Data?.content
+                  ? { __html: Data.content }
+                  : {
+                      __html: `<div><p>Chưa có dữ liệu để hiển thị</p> <p>Vui lòng chọn <strong> "Chỉnh sửa bài giới thiệu"  </strong> để cập nhật bài giới thiệu cho website!</p>  </div> `,
+                    }
+              }
+            ></div>
           </div>
         </div>
       </div>

@@ -1,6 +1,5 @@
 'use client';
 import { useStateProvider } from '@context/StateProvider';
-import { insertAndCustomizeId } from '@lib/api';
 import { Tabs, notification } from 'antd';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
@@ -8,43 +7,26 @@ import React, { useEffect, useState } from 'react';
 import slugify from 'slugify';
 import Display from './Tab/Display';
 import { SEOForm, StaticForm } from './Tab/Form';
-import { PostCategory } from '@assets/TypeProps';
+import { CategoryProps } from '@assets/props';
+import { insertAndCustomizeId, updateOne } from '@config/api/api';
+import { useAuth } from '@context/AuthProviders';
 
 interface PostsHandleProps {
   setIsOpen: (isOpen: boolean) => void;
-  Category: PostCategory[];
+  Category: CategoryProps[];
   Type?: string;
   postsLength: number;
 }
 
-interface lv1CategoryProps {
-  label: string;
-  value: string;
-}
 const PostsHandle = ({
   setIsOpen,
   Category,
   Type,
   postsLength,
 }: PostsHandleProps) => {
-  const [DataFilter, setDataFilter] = useState<lv1CategoryProps[]>([]);
   const { FormData, setFormData } = useStateProvider();
-
-  useEffect(() => {
-    let sortedData = Category.filter(
-      (item) => item.level0 === FormData?.level0
-    );
-
-    let formattedArray = sortedData?.map((item) => ({
-      label: item.level1,
-      value: slugify(item?.level1 ? item?.level1 : '', {
-        lower: true,
-        locale: 'vi',
-      }),
-    }));
-
-    setDataFilter(formattedArray);
-  }, [FormData?.level0]);
+  const { currentUser } = useAuth();
+  const router = useRouter();
 
   useEffect(() => {
     const randomText = Math.floor(Math.random() * 100000000000);
@@ -61,7 +43,6 @@ const PostsHandle = ({
     });
   }, [FormData?.title]);
 
-  const router = useRouter();
   const HandleSubmit = async () => {
     if (!FormData?.title) {
       notification.error({
@@ -77,20 +58,30 @@ const PostsHandle = ({
         lower: true,
         locale: 'vi',
       });
-      let Data = { ...FormData, level0: level0 };
+      if (Type === 'update') {
+        let Data = { ...FormData, level0: level0 };
+        updateOne(currentUser.firebaseConfig, 'Posts', Data.id, Data).then(
+          () => {
+            setIsOpen(false);
+            router.refresh();
+          }
+        );
+      } else {
+        let Data = { ...FormData, level0: level0 };
 
-      await insertAndCustomizeId(
-        'Posts',
-        Data,
-        `${postsLength ? 100000000000 + postsLength : 100000000000}`
-      ).then(() => {
-        setIsOpen(false);
-        router.refresh();
-      });
-
-      router.refresh();
+        await insertAndCustomizeId(
+          currentUser.firebaseConfig,
+          'Posts',
+          Data,
+          `${postsLength ? 100000000000 + postsLength : 100000000000}`
+        ).then(() => {
+          setIsOpen(false);
+          router.refresh();
+        });
+      }
     }
   };
+
   return (
     <div className="relative h-[60vh] overflow-y-auto scrollbar-thin px-3">
       <Tabs
@@ -106,7 +97,7 @@ const PostsHandle = ({
                 {Type === 'update' ? (
                   <Display />
                 ) : (
-                  <StaticForm DataFilter={DataFilter} />
+                  <StaticForm Category={Category} />
                 )}
               </>
             ),
@@ -119,7 +110,7 @@ const PostsHandle = ({
             children: (
               <>
                 {Type === 'update' ? (
-                  <StaticForm DataFilter={DataFilter} />
+                  <StaticForm Category={Category} />
                 ) : (
                   <SEOForm />
                 )}

@@ -1,17 +1,17 @@
 'use client';
-import { PostsTypeItems, WebsiteUrl } from '@assets/item';
+import { useAuth } from '@context/AuthProviders';
 import { useStateProvider } from '@context/StateProvider';
 import Link from 'next/link';
 import React from 'react';
 
 const Display = () => {
   const { FormData } = useStateProvider();
-
+  const { websiteUrl } = useAuth();
   return (
     <div>
       <div>
         <Link
-          href={`https://www.google.com/search?q=${WebsiteUrl}/chi-tiet-san-pham/${FormData?.url}`}
+          href={`https://www.google.com/search?q=${websiteUrl}/chi-tiet-san-pham/${FormData?.url}`}
         >
           <div className="border rounded-md border-black hover:shadow-2xl duration-300 mt-3 cursor-pointer">
             <div className=" flex flex-col px-5 py-3 text-[18px] font-normal">
@@ -19,7 +19,7 @@ const Display = () => {
                 {FormData?.title === undefined ? <>N/A</> : FormData?.title}
               </h2>
               <p className="text-[#006621]">
-                {WebsiteUrl}/{FormData?.url}
+                {websiteUrl}/{FormData?.url}
               </p>
             </div>
           </div>
@@ -53,7 +53,7 @@ const Display = () => {
                     Lượt xem: <strong> {FormData?.view}</strong>
                   </li>
 
-                  <div className="border rounded-md bg-slate-100">
+                  {/* <div className="border rounded-md bg-slate-100">
                     <div className="p-2">
                       {' '}
                       <li>
@@ -67,7 +67,7 @@ const Display = () => {
                       <li>Danh mục con: {FormData?.level1}</li>
                       <li>Topic: </li>
                     </div>
-                  </div>
+                  </div> */}
                   <li>
                     lượt đánh giá:{' '}
                     <strong>

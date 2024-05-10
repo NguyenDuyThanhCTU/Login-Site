@@ -27,6 +27,8 @@ export type AuthContextType = {
   HandleDashboardNavigate: (url: any) => void;
   isUserKey: string;
   setUserKey: (isUserKey: string) => void;
+  websiteUrl: string;
+  setWebsiteUrl: (websiteUrl: string) => void;
 };
 
 export const AuthContext = createContext<AuthContextType>({
@@ -38,7 +40,8 @@ export const AuthContext = createContext<AuthContextType>({
     name: '',
     username: '',
     password: '',
-    role: 'user',
+    role: 'Standard',
+    status: 'active',
     apiKey: '',
     appId: '',
     firebaseConfig: {
@@ -57,6 +60,12 @@ export const AuthContext = createContext<AuthContextType>({
     image: '',
     phone: '',
     email: '',
+    token: '',
+    address: '',
+    dateofbirth: '',
+    gender: '',
+    introduce: '',
+    websiteUrl: '',
   },
   setCurrentUser: () => {},
   ConfigData: [],
@@ -68,19 +77,24 @@ export const AuthContext = createContext<AuthContextType>({
   HandleDashboardNavigate: () => {},
   isUserKey: '',
   setUserKey: () => {},
+  websiteUrl: '',
+  setWebsiteUrl: () => {},
 });
 
 export const AuthProviders = ({ children }: Props) => {
   const { setIsLoading } = useStateProvider();
   const [verify, setVerify] = useState(false);
   const [isUserKey, setUserKey] = useState<string>('');
+  const [websiteUrl, setWebsiteUrl] = useState<string>('');
+
   const [currentUser, setCurrentUser] = useState<AccountProps>({
     stt: 0,
     id: '',
     name: '',
     username: '',
     password: '',
-    role: 'user',
+    role: 'Standard',
+    status: 'active',
     apiKey: '',
     appId: '',
     firebaseConfig: {
@@ -99,6 +113,12 @@ export const AuthProviders = ({ children }: Props) => {
     image: '',
     phone: '',
     email: '',
+    token: '',
+    address: '',
+    dateofbirth: '',
+    gender: '',
+    introduce: '',
+    websiteUrl: '',
   });
   const [ConfigData, setConfigData] = useState<Array<any>>([]);
   const [ProductsData, setProductsData] = useState<ProductProps[]>([]);
@@ -112,6 +132,8 @@ export const AuthProviders = ({ children }: Props) => {
   return (
     <AuthContext.Provider
       value={{
+        websiteUrl,
+        setWebsiteUrl,
         HandleDashboardNavigate,
         isUserKey,
         setUserKey,

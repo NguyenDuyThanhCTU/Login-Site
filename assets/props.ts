@@ -48,7 +48,7 @@ export interface CategoryProps {
   id: string;
   stt: number;
   level0: string;
-  level1: string;
+  level1: Array<string>;
   date: string;
 }
 export interface ProductProps {
@@ -172,7 +172,7 @@ export interface AccountProps {
   name: string;
   username: string;
   password: string;
-  role: 'editor' | 'user' | 'admin';
+  role: 'Standard' | 'Pro' | 'Advance' | 'Admin';
   apiKey: string;
   appId: string;
   firebaseConfig: FirebaseConfigProps;
@@ -180,9 +180,16 @@ export interface AccountProps {
   messagingSenderId: string;
   projectId: string;
   date: string;
+  status: 'active' | 'block';
+  websiteUrl: string;
   image?: string;
   phone?: string;
   email?: string;
+  token?: string;
+  address?: string;
+  dateofbirth?: string;
+  gender?: string;
+  introduce?: string;
 }
 
 //Plugin
@@ -197,6 +204,12 @@ export interface BranchProps {
   timeactive?: string;
 }
 
-export interface PartnerProps {}
+export interface PartnerProps {
+  id: string;
+  title: string;
+  image: string;
+  date: string;
+  url: string;
+}
 
 export interface FeedbackProps {}

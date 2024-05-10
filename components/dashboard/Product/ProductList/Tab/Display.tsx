@@ -11,7 +11,7 @@ const Display = () => {
   return (
     <div>
       <Link
-        href={`https://www.google.com/search?q=${currentUser.website}/chi-tiet-san-pham/${FormData?.url}`}
+        href={`https://www.google.com/search?q=${currentUser.websiteUrl}/chi-tiet-san-pham/${FormData?.url}`}
       >
         <div className="border rounded-md border-black hover:shadow-2xl duration-300 mt-3 cursor-pointer">
           <div className=" flex flex-col px-5 py-3 text-[18px] font-normal">
@@ -19,7 +19,7 @@ const Display = () => {
               {FormData?.title === undefined ? <>N/A</> : FormData?.title}
             </h2>
             <p className="text-[#006621]">
-              {currentUser.website}/{FormData?.url}
+              {currentUser.websiteUrl}/{FormData?.url}
             </p>
           </div>
         </div>

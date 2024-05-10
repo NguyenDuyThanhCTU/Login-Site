@@ -5,10 +5,11 @@ import React, { useState } from 'react';
 import { PiCardsLight } from 'react-icons/pi';
 import { useStateProvider } from '@context/StateProvider';
 
-import CRUDButton from '@components/items/admin/UI/CRUDButton';
-import { PostProps, ProductProps, SlideProps } from '@assets/TypeProps';
 import SlideHandle from './Slide/SlideHandle';
 import SlideBox from './Slide/Display';
+import { PostProps, ProductProps, SlideProps } from '@assets/props';
+import CRUDButton from '../items/UI/CRUDButton';
+import { getHighestNumber } from '../items/Handle/Handle';
 
 interface SlidesProps {
   Data: SlideProps[];
@@ -28,7 +29,6 @@ const Slide = ({ Data, PostsData, ProductsData }: SlidesProps) => {
       setFormData(sort[0]);
     }
   };
-
   return (
     <div className="w-full p:px-0 d:px-10 font-light gap-10 min-h-[90vh] bg-white py-10">
       <div className="flex items-center gap-5 d:flex-row p:flex-col">
@@ -72,13 +72,7 @@ const Slide = ({ Data, PostsData, ProductsData }: SlidesProps) => {
           setIsOpen={setIsAddModel}
           Products={ProductsData}
           Posts={PostsData}
-          slideLength={
-            Data === undefined
-              ? 0
-              : Data[0]?.stt === undefined
-              ? 0
-              : Data[0]?.stt + 1
-          }
+          slideLength={Data === undefined ? 0 : getHighestNumber(Data) + 1}
         />
       </Modal>
 

@@ -1,18 +1,21 @@
 'use client';
-import InputForm from '@components/items/admin/UI/InputForm';
+import InputForm from '@components/dashboard/items/UI/InputForm';
+import { insertAndCustomizeId, updateOne } from '@config/api/api';
+import { useAuth } from '@context/AuthProviders';
 import { useStateProvider } from '@context/StateProvider';
-import { insertAndCustomizeId, insertOne, updateOne } from '@lib/api';
 import { notification } from 'antd';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
 interface CollectionFormProps {
   setIsOpen: (isOpen: boolean) => void;
   collectionLength: number;
+  Type?: string;
 }
 
 const CollectionForm = ({
+  Type,
   setIsOpen,
   collectionLength,
 }: CollectionFormProps) => {
@@ -28,22 +31,39 @@ const CollectionForm = ({
     },
   ];
   const router = useRouter();
-  const HandleSubmit = async (Type: string) => {
+  const { currentUser } = useAuth();
+
+  const HandleSubmit = async (TypeCollection: string) => {
     const Data = { ...FormData, stt: collectionLength };
-    if (Type === 'hinh-anh') {
+    if (TypeCollection === 'hinh-anh') {
       if (!FormData?.image) {
         notification.error({
           message: 'Vui lòng chọn hình ảnh',
         });
       } else {
-        await insertAndCustomizeId(
-          'Collections',
-          Data,
-          `${collectionLength ? 100000000000 + collectionLength : 100000000000}`
-        ).then(() => {
-          setIsOpen(false);
-          router.refresh();
-        });
+        if (Type === 'update') {
+          updateOne(
+            currentUser.firebaseConfig,
+            'Collections',
+            FormData.id,
+            FormData
+          ).then(() => {
+            setIsOpen(false);
+            router.refresh();
+          });
+        } else {
+          await insertAndCustomizeId(
+            currentUser.firebaseConfig,
+            'Collections',
+            Data,
+            `${
+              collectionLength ? 100000000000 + collectionLength : 100000000000
+            }`
+          ).then(() => {
+            setIsOpen(false);
+            router.refresh();
+          });
+        }
       }
     } else {
       if (!FormData?.video) {
@@ -59,14 +79,29 @@ const CollectionForm = ({
           message: 'Vui lòng chọn thumbnail video',
         });
       } else {
-        await insertAndCustomizeId(
-          'Collections',
-          Data,
-          `${collectionLength ? 100000000000 + collectionLength : 100000000000}`
-        ).then(() => {
-          setIsOpen(false);
-          router.refresh();
-        });
+        if (Type === 'update') {
+          updateOne(
+            currentUser.firebaseConfig,
+            'Collections',
+            FormData.id,
+            FormData
+          ).then(() => {
+            setIsOpen(false);
+            router.refresh();
+          });
+        } else {
+          await insertAndCustomizeId(
+            currentUser.firebaseConfig,
+            'Collections',
+            Data,
+            `${
+              collectionLength ? 100000000000 + collectionLength : 100000000000
+            }`
+          ).then(() => {
+            setIsOpen(false);
+            router.refresh();
+          });
+        }
       }
     }
   };
@@ -106,8 +141,10 @@ const CollectionForm = ({
             />
           </div>
         </div>
-        {FormData?.type === 'hinh-anh' || FormData?.type === 'phu-tung' ? (
+        {FormData?.type === 'hinh-anh' ? (
           <>
+            <InputForm Label="Mô tả" Type="Input" field="describe" />
+
             <InputForm Label="Chọn hình ảnh" Type="Upload" field="image" />
           </>
         ) : (

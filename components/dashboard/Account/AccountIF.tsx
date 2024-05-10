@@ -16,7 +16,6 @@ const AccountIF = () => {
   const [isOpenUpdate, setIsOpenUpdate] = React.useState(false);
   const { setFormData } = useStateProvider();
   const { currentUser } = useAuth();
-
   return (
     <div className="px-10 bg-white rounded-md">
       <div className="p-4">

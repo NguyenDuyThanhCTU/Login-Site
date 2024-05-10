@@ -25,10 +25,12 @@ const InformationConfig = ({ Data }: { Data: Array<any> }) => {
   const [isHandleTwitter, setIsHandleTwitter] = useState(false);
   const [isHandleGoogle, setIsHandleGoogle] = useState(false);
   const { setFormData } = useStateProvider();
+  const informationData: InformationProps = Data?.find(
+    (item: any) => item.id === 'information'
+  );
 
   const Handle = (Type: any) => {
-    setFormData(Data);
-
+    setFormData(informationData);
     switch (Type) {
       case '404':
         setIsOpen404Modal(true);

@@ -5,15 +5,17 @@ import React, { useEffect, useState } from 'react';
 import { useStateProvider } from '@context/StateProvider';
 import { PiCardsLight } from 'react-icons/pi';
 import PostsHandle from './Posts/PostsHandle';
-import CRUDButton from '@components/items/admin/UI/CRUDButton';
-import FileSaver from '@components/items/admin/Handle/FileSaver';
-import Search from '@components/items/admin/UI/Search';
-import SortTable from '@components/items/admin/UI/SortTable';
-import { PostCategory, PostProps } from '@assets/TypeProps';
+
 import { PolicyBox, PostListBox } from './Posts/Display';
+import { CategoryProps, PostProps } from '@assets/props';
+import CRUDButton from '../items/UI/CRUDButton';
+import FileSaver from '../items/Handle/FileSaver';
+import Search from '../items/UI/Search';
+import SortTable from '../items/UI/SortTable';
+import { getHighestNumber } from '../items/Handle/Handle';
 
 interface PostsProps {
-  Category: PostCategory[];
+  Category: CategoryProps[];
   PostsData: PostProps[];
 }
 
@@ -29,8 +31,12 @@ const Posts = ({ Category, PostsData }: PostsProps) => {
   const { setFormData, FormData } = useStateProvider();
 
   useEffect(() => {
-    const policy = PostsData?.filter((item) => item.level0 === 'policy');
-    const other = PostsData?.filter((item) => item.level0 !== 'policy');
+    const policy = PostsData?.filter(
+      (item) => item.level0 === 'dieu-khoan-su-dung'
+    );
+    const other = PostsData?.filter(
+      (item) => item.level0 !== 'dieu-khoan-su-dung'
+    );
     setPolicy(policy);
     setData(other);
   }, [PostsData]);
@@ -47,7 +53,7 @@ const Posts = ({ Category, PostsData }: PostsProps) => {
       const sort = Data?.find((item) => item.id === id);
       setFormData(sort);
       setIsUpdateModel(true);
-    } else if (type === 'policy') {
+    } else if (type === 'dieu-khoan-su-dung') {
       const sort = Policy?.find((item) => item.id === id);
       setFormData(sort);
       setIsUpdateModel(true);
@@ -139,11 +145,7 @@ const Posts = ({ Category, PostsData }: PostsProps) => {
         <PostsHandle
           setIsOpen={setIsAddModel}
           Category={Category}
-          postsLength={
-            PostsData?.length === 0 || PostsData?.length === undefined
-              ? 0
-              : PostsData[0]?.stt + 1
-          }
+          postsLength={Data === undefined ? 0 : getHighestNumber(Data) + 1}
         />
       </Modal>
 

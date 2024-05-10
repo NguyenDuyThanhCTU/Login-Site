@@ -10,17 +10,18 @@ import { GiAlarmClock } from 'react-icons/gi';
 import { RiUserSettingsLine } from 'react-icons/ri';
 import Handle from './Handle';
 import { useRouter } from 'next/navigation';
-import { deleteOne } from '@lib/api';
 import Image from 'next/image';
+import { deleteOne } from '@config/api/api';
+import { useAuth } from '@context/AuthProviders';
 
 const BranchCard = ({ Data }: any) => {
   const [isOpenUpdate, setIsOpenUpdate] = useState<boolean>(false);
   const { setFormData, FormData } = useStateProvider();
-
+  const { currentUser } = useAuth();
   const router = useRouter();
 
   const HandleDelete = async (id: string) => {
-    deleteOne('Branches', id).then(() => {
+    deleteOne(currentUser.firebaseConfig, 'Branches', id).then(() => {
       router.refresh();
     });
   };

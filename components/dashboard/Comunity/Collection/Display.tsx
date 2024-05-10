@@ -1,5 +1,6 @@
-import { CollectionProps } from '@assets/TypeProps';
-import { deleteOne } from '@lib/api';
+import { CollectionProps } from '@assets/props';
+import { deleteOne } from '@config/api/api';
+import { useAuth } from '@context/AuthProviders';
 import { Image, Popconfirm } from 'antd';
 import { useRouter } from 'next/navigation';
 import React from 'react';
@@ -13,9 +14,9 @@ interface VideoCollectionBoxProps {
 
 export const ImageCollectionBox = ({ Data }: { Data: CollectionProps[] }) => {
   const router = useRouter();
-
+  const { currentUser } = useAuth();
   const HandleDelete = async (id: string) => {
-    deleteOne('Collections', id).then(() => {
+    deleteOne(currentUser.firebaseConfig, 'Collections', id).then(() => {
       router.refresh();
     });
   };
@@ -86,9 +87,9 @@ export const VideoCollectionBox = ({
   setIsOpen,
 }: VideoCollectionBoxProps) => {
   const router = useRouter();
-
+  const { currentUser } = useAuth();
   const HandleDelete = async (id: string) => {
-    deleteOne('Collections', id).then(() => {
+    deleteOne(currentUser.firebaseConfig, 'Collections', id).then(() => {
       router.refresh();
     });
   };

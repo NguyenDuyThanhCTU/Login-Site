@@ -9,56 +9,69 @@ import SwitchLanguage from '@components/Items/SwitchLanguage';
 import { AccountProps } from '@assets/props';
 import { useAuth } from '@context/AuthProviders';
 import { useStateProvider } from '@context/StateProvider';
+import { randomString } from '@components/dashboard/items/Handle/Handle';
 interface LoginProps {
   Lang: string;
   dict: any;
   Data: AccountProps[];
 }
 
-interface isLoginFormProps {
-  username: string;
-  password: string;
+interface LoginFormProps {
+  username: any;
+  password: any;
 }
+
 const Login = ({ Lang, dict, Data }: LoginProps) => {
   const [Hide, setHide] = useState<boolean>(false);
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
-  const [isFirebaseConfig, setFirebaseConfig] = useState<AccountProps[]>([]);
-  const [isLoginForm, setIsLoginForm] = useState<isLoginFormProps>({
+  const [isLoginForm, setIsLoginForm] = useState<LoginFormProps>({
     username: '',
     password: '',
   });
-  const { setVerify, setCurrentUser } = useAuth();
+  const { setVerify, setCurrentUser, setUserKey, setWebsiteUrl } = useAuth();
   const { HandleNavigate, setIsLoading, setFormData } = useStateProvider();
+
   useEffect(() => {
-    Data.map((item: AccountProps) => {
-      setFirebaseConfig([
-        ...isFirebaseConfig,
-        {
-          stt: item.stt,
-          id: item.id,
-          name: item.name,
-          username: item.username,
-          password: item.password,
-          role: item.role,
-          date: item.date,
-          firebaseConfig: {
-            apiKey: item.apiKey,
-            appId: item.appId,
-            authDomain: `${item.projectId}.firebaseapp.com`,
-            storageBucket: `${item.projectId}.appspot.com`,
-            measurementId: item.measurementId,
-            messagingSenderId: item.messagingSenderId,
-            projectId: item.projectId,
-          },
-          apiKey: item.apiKey,
-          projectId: item.projectId,
-          messagingSenderId: item.measurementId,
-          appId: item.appId,
-          measurementId: item.measurementId,
-        },
-      ]);
+    setIsLoginForm({
+      ...isLoginForm,
+      username: localStorage.getItem('username')
+        ? localStorage.getItem('username')
+        : '',
+      password: localStorage.getItem('password')
+        ? localStorage.getItem('password')
+        : '',
     });
   }, []);
+  // useEffect(() => {
+  //   Data.map((item: AccountProps) => {
+  //     setFirebaseConfig([
+  //       ...isFirebaseConfig,
+  //       {
+  //         stt: item.stt,
+  //         id: item.id,
+  //         name: item.name,
+  //         username: item.username,
+  //         password: item.password,
+  //         role: item.role,
+  //         date: encodeURIComponent(item.date),
+  //         firebaseConfig: {
+  //           apiKey: item.apiKey,
+  //           appId: item.appId,
+  //           authDomain: `${item.projectId}.firebaseapp.com`,
+  //           storageBucket: `${item.projectId}.appspot.com`,
+  //           measurementId: item.measurementId,
+  //           messagingSenderId: item.messagingSenderId,
+  //           projectId: item.projectId,
+  //         },
+  //         apiKey: item.apiKey,
+  //         projectId: item.projectId,
+  //         messagingSenderId: item.measurementId,
+  //         appId: item.appId,
+  //         measurementId: item.measurementId,
+  //       },
+  //     ]);
+  //   });
+  // }, []);
 
   const HandleLogin = () => {
     if (isLoginForm.password === '' || isLoginForm.username === '') {
@@ -67,21 +80,30 @@ const Login = ({ Lang, dict, Data }: LoginProps) => {
         description: 'Vui lòng nhập thông tin Tài khoản và Mật khẩu.',
       });
     } else {
-      const checkedAccount = isFirebaseConfig.find(
+      const checkedAccount = Data.find(
         (item) =>
           item.username === isLoginForm.username &&
           item.password === isLoginForm.password
       );
+
       setIsLoading(1500);
       if (checkedAccount) {
-        localStorage.setItem('currentUser', JSON.stringify(checkedAccount));
+        //encodeUrl all checkedAccount object in for
+        const encodeAccount = encodeURIComponent(
+          JSON.stringify(checkedAccount)
+        );
+
+        const BaseCurrentUser = btoa(encodeAccount);
+        setUserKey(BaseCurrentUser);
+        setWebsiteUrl(checkedAccount.websiteUrl);
         setCurrentUser(checkedAccount);
         setVerify(true);
 
-        HandleNavigate('/admin');
+        localStorage.setItem('username', checkedAccount.username);
+        localStorage.setItem('password', checkedAccount.password);
+        HandleNavigate(`/admin?tab=home&key=${BaseCurrentUser}`);
         notification.success({
           message: 'Đăng nhập thành công',
-          description: 'Vui lòng nhập thông tin Tài khoản và Mật khẩu.',
         });
       } else {
         notification.error({
@@ -109,6 +131,7 @@ const Login = ({ Lang, dict, Data }: LoginProps) => {
             <div className="w-full border rounded-lg mb-1">
               <input
                 type="text"
+                value={isLoginForm.username}
                 className="p-2 w-full font-normal rounded-lg"
                 onChange={(e) =>
                   setIsLoginForm({ ...isLoginForm, username: e.target.value })
@@ -124,6 +147,7 @@ const Login = ({ Lang, dict, Data }: LoginProps) => {
             <div className="w-full border rounded-lg mb-1 relative">
               <input
                 type={Hide ? 'text' : 'password'}
+                value={isLoginForm.password}
                 className="p-2  w-full font-normal rounded-lg "
                 onChange={(e) =>
                   setIsLoginForm({ ...isLoginForm, password: e.target.value })
