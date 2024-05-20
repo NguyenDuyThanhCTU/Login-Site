@@ -10,7 +10,6 @@ import { Drawer, Modal, Tooltip } from 'antd';
 import { RxCross2 } from 'react-icons/rx';
 import { useStateProvider } from '@context/StateProvider';
 import { DashboardMapping, FunctionItem } from './items/items';
-import { AccountProps } from '@assets/props';
 import HeaderDropDown from './items/header/HeaderDropDown';
 import MobileUI from './items/header/MobileUI';
 import { useAuth } from '@context/AuthProviders';
@@ -53,8 +52,8 @@ const Header = ({ dict, Key }: { dict: any; Key: string }) => {
       ? dict.DashboardPage.AdvanceHeader
       : currentUser.role === 'Admin' && dict.DashboardPage.AdminHeader;
   return (
-    <div className="z-50 relative">
-      <div className="border-b shadow-xl  h-[65px] p:hidden d:grid grid-cols-4 fixed top-0 w-full bg-white ">
+    <div className="">
+      <div className="border-b shadow-xl  h-[65px] p:hidden d:grid  grid-cols-4  bg-white ">
         <div
           onClick={() => HandleDashboardNavigate(`/admin?tab=home`)}
           className="w-full "
@@ -165,13 +164,17 @@ const Header = ({ dict, Key }: { dict: any; Key: string }) => {
               <div className="hidden group-hover:block absolute top-14 -left-14">
                 <div className="py-3 min-w-[160px] border-gray-300  border border-solid rounded-lg bg-white relative  ">
                   <div className="">
-                    <Link
-                      href={`/admin?tab=thong-tin-tai-khoan`}
+                    <div
+                      onClick={() =>
+                        HandleDashboardNavigate(
+                          `/admin/?tab=thong-tin-tai-khoan`
+                        )
+                      }
                       className="flex gap-2 items-center font-light hover:bg-gray-100 h-max py-2 px-5 text-[14px]  rounded-md cursor-pointer"
                     >
                       <IoSettingsOutline className="" />
                       <p className="w-max">Thông tin tài khoản</p>
-                    </Link>
+                    </div>
                   </div>
                   <div className="text-red-500">
                     <div
@@ -193,7 +196,9 @@ const Header = ({ dict, Key }: { dict: any; Key: string }) => {
           </div>
         </div>
       </div>
-      <MobileUI />
+      <>
+        <MobileUI dict={dict} Key={Key} />
+      </>
 
       <Modal
         footer={null}

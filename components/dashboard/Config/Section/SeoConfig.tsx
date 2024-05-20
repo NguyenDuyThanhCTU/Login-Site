@@ -40,7 +40,7 @@ const SeoConfig = ({ Data }: { Data: Array<any> }) => {
             </p>
           </div>
           <Link
-            href={`https://www.google.com/search?q=${contactData.WebsiteAddress}`}
+            href={`https://www.google.com/search?q=${contactData?.WebsiteAddress}`}
             target="_blank"
           >
             <div className="border rounded-md border-black hover:shadow-2xl duration-300 mt-3 cursor-pointer">
@@ -64,7 +64,7 @@ const SeoConfig = ({ Data }: { Data: Array<any> }) => {
                         {SEOconfigData?.Title}
                       </p>
                       <p className="text-[#006621] ">
-                        {contactData.WebsiteAddress}
+                        {contactData?.WebsiteAddress}
                       </p>
                     </div>
                   </h2>

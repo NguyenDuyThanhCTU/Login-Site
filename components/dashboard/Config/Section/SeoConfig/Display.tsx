@@ -123,9 +123,9 @@ export const AdvanceSEOBox = ({
           </div>
           <div
             className="col-span-5 pl-2 py-2 flex gap-2 overflow-auto scrollbar-thin text-[#006621] cursor-pointer"
-            onClick={() => HandleNavigate(`${Data.WebsiteAddress}/robots.txt`)}
+            onClick={() => HandleNavigate(`${Data?.WebsiteAddress}/robots.txt`)}
           >
-            {Data.WebsiteAddress}/robots.txt
+            {Data?.WebsiteAddress}/robots.txt
           </div>
           <div className="py-2 pr-3 flex items-start gap-2 col-span-2 w-full justify-end mt-2 ">
             Nội dung file robots.txt:
@@ -142,7 +142,7 @@ export const AdvanceSEOBox = ({
             Đường dẫn tới file sitemap.xml:
           </div>
           <div className="col-span-5 pl-2 py-2 flex gap-2 overflow-auto scrollbar-thin text-[#006621] cursor-pointer">
-            {Data.WebsiteAddress}/sitemap.xml
+            {Data?.WebsiteAddress}/sitemap.xml
           </div>
           <div className="py-2 pr-3 flex items-start gap-2 col-span-2 w-full justify-end mt-2 ">
             Nội dung file sitemap.xml:
@@ -151,7 +151,7 @@ export const AdvanceSEOBox = ({
             <div className="p-2 overflow-auto">
               {`<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
       <url>
-        <loc${Data.WebsiteAddress}</loc>
+        <loc${Data?.WebsiteAddress}</loc>
         <lastmod>2023-04-06T15:02:24.021Z</lastmod>
         <changefreq>yearly</changefreq>
         <priority>1</priority>

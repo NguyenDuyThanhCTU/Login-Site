@@ -48,8 +48,6 @@ const ProductHandle = ({
   const HandleSubmit = async () => {
     if (!FormData?.title) {
       notification.error({ message: 'Vui lòng nhập tên sản phẩm' });
-    } else if (!FormData?.level0) {
-      notification.error({ message: 'Vui lòng chọn danh mục sản phẩm' });
     } else if (!FormData?.image) {
       notification.error({ message: 'Vui lòng chọn ảnh sản phẩm' });
     } else {

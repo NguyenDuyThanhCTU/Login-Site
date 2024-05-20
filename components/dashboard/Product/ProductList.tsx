@@ -73,7 +73,11 @@ const ListProduct = ({ Category, Data }: ListProductProps) => {
             <SortTable Data={DataShow} setData={setDataFilter} Field="title" />
           </div>
         </div>
-        <ListProductBox DataShow={DataShow} setIsOpen={HandleSelectProduct} />
+        <ListProductBox
+          DataShow={DataShow}
+          setIsOpen={HandleSelectProduct}
+          CategoryData={Category}
+        />
         {Data?.length > 10 && (
           <div className="w-full justify-end flex mt-6 mr-2">
             <Pagination

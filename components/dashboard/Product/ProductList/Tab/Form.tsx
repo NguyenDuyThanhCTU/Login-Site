@@ -11,21 +11,22 @@ import { MdUpload } from 'react-icons/md';
 import { RxCross2 } from 'react-icons/rx';
 import slugify from 'slugify';
 
-interface lv1CategoryProps {
+interface SubCategoryProps {
   label: string;
   value: string;
 }
 
 export const StaticForm = ({ Category }: { Category: CategoryProps[] }) => {
-  const [DataFilter, setDataFilter] = useState<lv1CategoryProps[]>([]);
+  const [DataFilter, setDataFilter] = useState<SubCategoryProps[]>([]);
+  const [DataFilterLV1, setDataFilterLV1] = useState<SubCategoryProps[]>([]);
+
   const { FormData, setFormData } = useStateProvider();
   const { currentUser } = useAuth();
   useEffect(() => {
-    let sortedData = Category?.find(
+    let sortedData: any = Category?.find(
       (item: any) => item.level0 === FormData?.level0
     );
-
-    let formattedArray: any = sortedData?.level1?.map((item) => ({
+    let LV1Format: any = sortedData?.level1?.map((item: any) => ({
       label: item,
 
       value: slugify(item ? item : '', {
@@ -33,8 +34,22 @@ export const StaticForm = ({ Category }: { Category: CategoryProps[] }) => {
         locale: 'vi',
       }),
     }));
-    setDataFilter(formattedArray);
-  }, [FormData.level0]);
+
+    setDataFilter(LV1Format);
+    if (sortedData) {
+      let SubCategoryFormat: any = sortedData[FormData.level1]?.map(
+        (item: any) => ({
+          label: item,
+
+          value: slugify(item ? item : '', {
+            lower: true,
+            locale: 'vi',
+          }),
+        })
+      );
+      setDataFilterLV1(SubCategoryFormat);
+    }
+  }, [FormData.level0, FormData.level1]);
 
   const customRequest = async (options: any) => {
     options.onSuccess({});
@@ -43,7 +58,7 @@ export const StaticForm = ({ Category }: { Category: CategoryProps[] }) => {
       const url = await uploadImage(
         options.file,
         'avatar',
-        currentUser.firebaseConfig
+        currentUser.firebaseConfig.storageBucket
       );
       const newUrl = {
         uid: options.file.uid,
@@ -90,15 +105,18 @@ export const StaticForm = ({ Category }: { Category: CategoryProps[] }) => {
             field="level0"
             Option={Category}
           />
-          <>
-            {' '}
-            <InputForm
-              Label="Mục sản phẩm"
-              Type="Select"
-              field="level1"
-              Option={DataFilter}
-            />
-          </>
+          <InputForm
+            Label="Mục sản phẩm"
+            Type="Select"
+            field="level1"
+            Option={DataFilter}
+          />
+          <InputForm
+            Label="Mục cấp 1"
+            Type="Select"
+            field="level2"
+            Option={DataFilterLV1}
+          />
         </div>
       </div>
       <div className="flex gap-5 flex-col mt-5">

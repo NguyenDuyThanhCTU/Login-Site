@@ -84,7 +84,7 @@ const InputForm = ({
                 )}
               </div>
               <div className="px-4 py-1   bg-white rounded-lg w-full col-span-6">
-                {/* <TextEditor
+                <TextEditor
                   storageBucket={currentUser.firebaseConfig.storageBucket}
                   initialValue={
                     FormData ? FormData[field] : '<p>Content...</p>'
@@ -92,7 +92,7 @@ const InputForm = ({
                   onChange={setFormData}
                   Form={FormData}
                   Field={field}
-                /> */}
+                />
               </div>
             </div>
           </>

@@ -1,6 +1,5 @@
 'use client';
 
-import HandleKeyword from '@components/dashboard/items/Handle/Keyword';
 import InputForm from '@components/dashboard/items/UI/InputForm';
 import { useStateProvider } from '@context/StateProvider';
 import { findOne, insertOne, updateOne } from '@config/api/api';
@@ -15,11 +14,9 @@ export const BasicSEOForm = ({
   setIsOpen: (isOpen: boolean) => void;
 }) => {
   const router = useRouter();
-  const { FormData, setIsLoading } = useStateProvider();
+  const { FormData } = useStateProvider();
   const { currentUser } = useAuth();
   const HandleSubmit = async () => {
-    setIsLoading(2000);
-
     await updateOne(currentUser.firebaseConfig, 'Config', 'SEOconfig', {
       ...FormData,
       id: 'SEOconfig',

@@ -2,13 +2,12 @@ import { useStateProvider } from '@context/StateProvider';
 import { Modal, Pagination, Popconfirm } from 'antd';
 import React, { useEffect, useState } from 'react';
 
-import Handle from './Category/Handle';
-
 import ProductCategoryBox from './Category/Display';
 import { CategoryProps } from '@assets/props';
 import Heading from '@components/dashboard/items/UI/Heading';
 import CRUDButton from '@components/dashboard/items/UI/CRUDButton';
 import { getHighestNumber } from '@components/dashboard/items/Handle/Handle';
+import { ProductCategoryForm } from './Category/Handle';
 
 const Category = ({ Data }: { Data: CategoryProps[] }) => {
   const [isAddModel, setIsAddModel] = useState<boolean>(false);
@@ -78,7 +77,7 @@ const Category = ({ Data }: { Data: CategoryProps[] }) => {
         destroyOnClose={true}
         afterClose={() => setFormData({})}
       >
-        <Handle
+        <ProductCategoryForm
           setIsOpen={setIsAddModel}
           categoryLength={Data === undefined ? 0 : getHighestNumber(Data) + 1}
         />
@@ -93,7 +92,7 @@ const Category = ({ Data }: { Data: CategoryProps[] }) => {
         afterClose={() => setFormData({})}
         onCancel={() => setIsUpdateModel(false)}
       >
-        <Handle
+        <ProductCategoryForm
           setIsOpen={setIsUpdateModel}
           Type="update"
           categoryLength={FormData?.stt}

@@ -54,7 +54,7 @@ const ImageUploader = ({
         }`}
       >
         <input {...getInputProps()} />
-        {Form[Field] !== undefined ? (
+        {Form !== undefined ? (
           <Image
             width={500}
             height={500}

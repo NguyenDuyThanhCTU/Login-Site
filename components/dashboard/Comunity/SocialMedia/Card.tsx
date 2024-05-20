@@ -59,7 +59,7 @@ const SocialMediaCard = ({
         <div className="" onClick={() => setSelected(index)}>
           <input
             type="text"
-            value={isSocialMedia ? isSocialMedia : value[field]}
+            value={isSocialMedia ? isSocialMedia : value ? value[field] : ''}
             className="outline-none text-black py-2 px-3 rounded-md w-full"
             onChange={(e) => setSocialMedia(e.target.value)}
           />

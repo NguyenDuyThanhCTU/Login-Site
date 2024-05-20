@@ -15,10 +15,9 @@ interface HandleFormProps {
 
 export const Handle404Form = ({ setIsOpen }: HandleFormProps) => {
   const router = useRouter();
-  const { FormData, setIsLoading } = useStateProvider();
+  const { FormData } = useStateProvider();
   const { currentUser } = useAuth();
   const HandleSubmit = async () => {
-    setIsLoading(2000);
     await updateOne(currentUser.firebaseConfig, 'Config', 'information', {
       ...FormData,
       id: 'information',
@@ -55,12 +54,10 @@ export const Handle404Form = ({ setIsOpen }: HandleFormProps) => {
 
 export const HandleLogoForm = ({ setIsOpen, Logo }: HandleFormProps) => {
   const router = useRouter();
-  const { FormData, setIsLoading } = useStateProvider();
+  const { FormData } = useStateProvider();
   const { currentUser } = useAuth();
 
   const HandleSubmit = async () => {
-    setIsLoading(2000);
-
     await updateOne(
       currentUser.firebaseConfig,
       'Config',
@@ -106,12 +103,10 @@ export const HandleLogoForm = ({ setIsOpen, Logo }: HandleFormProps) => {
 
 export const HandleFacebookForm = ({ setIsOpen }: HandleFormProps) => {
   const router = useRouter();
-  const { FormData, setIsLoading } = useStateProvider();
+  const { FormData } = useStateProvider();
   const { currentUser } = useAuth();
 
   const HandleSubmit = async () => {
-    setIsLoading(2000);
-
     await updateOne(
       currentUser.firebaseConfig,
       'Config',
@@ -149,12 +144,10 @@ export const HandleFacebookForm = ({ setIsOpen }: HandleFormProps) => {
 
 export const HandleTwitterForm = ({ setIsOpen }: HandleFormProps) => {
   const router = useRouter();
-  const { FormData, setIsLoading } = useStateProvider();
+  const { FormData } = useStateProvider();
   const { currentUser } = useAuth();
 
   const HandleSubmit = async () => {
-    setIsLoading(2000);
-
     await updateOne(
       currentUser.firebaseConfig,
       'Config',
@@ -192,12 +185,10 @@ export const HandleTwitterForm = ({ setIsOpen }: HandleFormProps) => {
 
 export const HandleGoogleForm = ({ setIsOpen }: HandleFormProps) => {
   const router = useRouter();
-  const { FormData, setIsLoading } = useStateProvider();
+  const { FormData } = useStateProvider();
   const { currentUser } = useAuth();
 
   const HandleSubmit = async () => {
-    setIsLoading(2000);
-
     await updateOne(
       currentUser.firebaseConfig,
       'Config',

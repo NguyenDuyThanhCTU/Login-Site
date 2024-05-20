@@ -60,7 +60,7 @@ export const PolicyBox = ({ Policy, setIsOpen }: PolicyBoxProps) => {
                     <div
                       className="text-emerald-500 hover:text-emerald-700 duration-300 hover:scale-125"
                       onClick={() => {
-                        setIsOpen(items.id, 'policy');
+                        setIsOpen(items.id, 'dieu-khoan-su-dung');
                       }}
                     >
                       <FaEdit />

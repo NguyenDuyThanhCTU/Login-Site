@@ -78,7 +78,6 @@ const TextEditor = ({
               data={editorData}
               onChange={(event: any, editor: any) => {
                 const data = editor.getData();
-                console.log(data);
                 setEditorData(data);
                 onChange({ ...Form, [Field]: data });
               }}

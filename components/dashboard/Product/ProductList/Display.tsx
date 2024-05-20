@@ -1,22 +1,28 @@
 'use client';
 
-import { ProductProps } from '@assets/props';
+import { CategoryProps, ProductProps } from '@assets/props';
 import { deleteOne, updateOne } from '@config/api/api';
 import { useAuth } from '@context/AuthProviders';
 import { Modal, Popconfirm } from 'antd';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
-import { FaEdit } from 'react-icons/fa';
+import { FaAngleDoubleRight, FaAngleRight, FaEdit } from 'react-icons/fa';
 import { MdDeleteForever } from 'react-icons/md';
 import { TbArrowsMoveVertical } from 'react-icons/tb';
+import slugify from 'slugify';
 
 interface ListProductProps {
   DataShow: ProductProps[];
   setIsOpen: (isOpen: string) => void;
+  CategoryData: CategoryProps[];
 }
 
-const ListProductBox = ({ DataShow, setIsOpen }: ListProductProps) => {
+const ListProductBox = ({
+  DataShow,
+  setIsOpen,
+  CategoryData,
+}: ListProductProps) => {
   const [isOpenModal, setOpenModal] = useState(false);
   const [isSelected, setSelected] = useState<ProductProps>();
   const [isNewPosition, setNewPosition] = useState<number>();
@@ -51,14 +57,16 @@ const ListProductBox = ({ DataShow, setIsOpen }: ListProductProps) => {
   return (
     <>
       <div className="mt-5 text-black ">
-        <div className="p:hidden d:grid grid-cols-8 border-b-2 border-black py-3 font-semibold">
-          {['Sản phẩm', 'Đơn giá', 'Danh mục', 'Tags', 'Thời gian', ''].map(
+        <div className="grid grid-cols-8 border-b-2 border-black py-3 font-semibold ">
+          {['Sản phẩm', 'Đơn giá', 'Danh mục', 'Thời gian', ''].map(
             (item, idx) => (
               <div
                 key={idx}
                 className={`${
-                  item === 'Sản phẩm' || item === 'Tags'
+                  item === 'Sản phẩm'
                     ? 'col-span-2 ml-5 '
+                    : item === 'Danh mục'
+                    ? 'col-span-3 ml-5 '
                     : 'col-span-1'
                 }
                 flex  w-full
@@ -69,8 +77,34 @@ const ListProductBox = ({ DataShow, setIsOpen }: ListProductProps) => {
             )
           )}
         </div>
-        <div className="p:hidden d:block h-[605px] overflow-y-auto scrollbar-thin">
+        <div className="block h-[605px] overflow-y-auto scrollbar-thin ">
           {DataShow?.map((item, idx) => {
+            const DecodeCategory: any = CategoryData?.find(
+              (Citem) =>
+                slugify(Citem.level0, {
+                  locale: 'vi',
+                  lower: true,
+                }) === item.level0
+            );
+            const DecodeLV0 = DecodeCategory?.level0;
+            const DecodeLV1 = DecodeCategory?.level1
+              ? DecodeCategory?.level1.find(
+                  (Citem: any) =>
+                    slugify(Citem, {
+                      locale: 'vi',
+                      lower: true,
+                    }) === item.level1
+                )
+              : '';
+            let DecodeLV2;
+            if (item.level1) {
+              DecodeLV2 = DecodeCategory[item.level1].find(
+                (lv2Item: any) =>
+                  slugify(lv2Item, { locale: 'vi', lower: true }) ===
+                  item.level2
+              );
+            }
+
             return (
               <div
                 className="grid grid-cols-8 border-b py-3 cursor-pointer hover:bg-slate-100 items-center text-[14px]"
@@ -114,35 +148,24 @@ const ListProductBox = ({ DataShow, setIsOpen }: ListProductProps) => {
                     <p className="text-gray-400">N/A</p>
                   )}
                 </div>
-                <div className="flex flex-col items-start text-[14px] ">
-                  <p className="px-3 py-2 bg-main rounded-full text-white">
-                    {/* {
-                      ProductTypeItems.find(
-                        (items: any) => items.value === item.level0
-                      )?.label
-                    } */}
-                  </p>
-                  {item.level1 && (
-                    <p className="ml-3 mt-1 w-max py-1 px-3 rounded-xl bg-adminOrange">
-                      {item.level1}
-                    </p>
-                  )}
-                </div>
-                <div className="  col-span-2">
-                  {item?.Keyword?.length > 0 ? (
-                    <div className="flex flex-wrap gap-3">
-                      {item?.Keyword.map((item: any, idx: number) => (
-                        <div
-                          key={idx}
-                          className="border bg-slate-200 rounded-full relative"
-                        >
-                          <div className="w-max py-1 px-3">{item}</div>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <></>
-                  )}
+                <div className="flex flex-col items-start text-[14px] col-span-3">
+                  <p className="px-3 py-2 bg-main rounded-full text-white"></p>
+
+                  <div className="flex flex-col">
+                    {item.level0 && <p className="">{DecodeLV0}</p>}
+                    {item.level0 && (
+                      <div className="ml-1 flex items-center gap-1">
+                        <FaAngleRight className="text-blue-500" />
+                        <p className="">{DecodeLV1}</p>
+                      </div>
+                    )}
+                    {item.level0 && (
+                      <div className="ml-2 flex items-center gap-1">
+                        <FaAngleDoubleRight className="text-red-600" />
+                        <p className="">{DecodeLV2}</p>
+                      </div>
+                    )}
+                  </div>
                 </div>
                 <div className="">{item.date}</div>{' '}
                 <div className="flex items-center  justify-center gap-3 text-[22px] mr-3 cursor-pointer">

@@ -1,13 +1,17 @@
+'use client';
 import { CategoryProps } from '@assets/props';
 import IndexChanged from '@components/dashboard/items/UI/IndexChanged';
 import { deleteOne } from '@config/api/api';
 import { useAuth } from '@context/AuthProviders';
-import { Popconfirm } from 'antd';
+import { useStateProvider } from '@context/StateProvider';
+import { Badge, Modal, Popconfirm } from 'antd';
 import { useRouter } from 'next/navigation';
-import React from 'react';
+import React, { useState } from 'react';
 import { FaEdit } from 'react-icons/fa';
 import { MdDeleteForever } from 'react-icons/md';
 import { TbArrowsMoveVertical } from 'react-icons/tb';
+import slugify from 'slugify';
+import { ProductSubCategoryForm } from './Handle';
 
 interface ProductCategoryBoxProps {
   DataShow: CategoryProps[];
@@ -18,7 +22,10 @@ const ProductCategoryBox = ({
   DataShow,
   setIsOpen,
 }: ProductCategoryBoxProps) => {
+  const [isUpdateModel, setIsUpdateModel] = useState<boolean>(false);
+  const [Level1Category, setLevel1Category] = useState<string>('');
   const router = useRouter();
+  const { setFormData } = useStateProvider();
   const { currentUser } = useAuth();
 
   const HandleDelete = async (id: string) => {
@@ -26,6 +33,15 @@ const ProductCategoryBox = ({
       router.refresh();
     });
   };
+
+  const HandleSubCategory = (category: string, root: CategoryProps) => {
+    const level1Slug = slugify(category, { lower: true, locale: 'vi' });
+
+    setLevel1Category(level1Slug);
+    setIsUpdateModel(true);
+    setFormData(root);
+  };
+
   return (
     <>
       <div className="grid grid-cols-4 border-b-2 border-black py-3 font-semibold">
@@ -46,7 +62,7 @@ const ProductCategoryBox = ({
         {DataShow?.map((item, idx) => {
           return (
             <div
-              className="grid cursor-default  grid-cols-4 border-b py-3  hover:bg-slate-200 items-center "
+              className="grid cursor-default  grid-cols-4 border-b py-3  hover:bg-slate-100 items-center "
               key={idx}
             >
               <div className=" grid grid-cols-3 px-3">
@@ -55,11 +71,24 @@ const ProductCategoryBox = ({
               </div>
 
               <div className=" pl-2 py-2 flex flex-wrap gap-2 col-span-2">
-                {item?.level1?.map((item, idx) => (
-                  <div key={idx} className="border bg-slate-200 rounded-full">
-                    <div className="w-max py-1 px-3">{item}</div>
-                  </div>
-                ))}
+                {item?.level1?.map((Lv1item, idx) => {
+                  const Level1Slug = slugify(Lv1item, {
+                    lower: true,
+                    locale: 'vi',
+                  });
+                  const SubCategoryLength = item[Level1Slug]?.length;
+                  return (
+                    <div
+                      key={idx}
+                      className="border bg-slate-200 rounded-full cursor-pointer hover:bg-slate-400 duration-300"
+                      onClick={() => HandleSubCategory(Lv1item, item)}
+                    >
+                      <Badge count={SubCategoryLength}>
+                        <div className="w-max py-1 px-3">{Lv1item}</div>
+                      </Badge>
+                    </div>
+                  );
+                })}
               </div>
 
               <div className="w-full flex gap-2 items-center justify-end mr-2 ">
@@ -96,6 +125,21 @@ const ProductCategoryBox = ({
           );
         })}
       </div>
+
+      <Modal
+        title={`Chỉnh sửa mục sản phẩm ${Level1Category}`}
+        footer={null}
+        open={isUpdateModel}
+        width={700}
+        destroyOnClose={true}
+        afterClose={() => setFormData({})}
+        onCancel={() => setIsUpdateModel(false)}
+      >
+        <ProductSubCategoryForm
+          Lv1Field={Level1Category}
+          setIsOpen={setIsUpdateModel}
+        />
+      </Modal>
     </>
   );
 };

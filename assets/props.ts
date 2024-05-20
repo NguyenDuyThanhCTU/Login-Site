@@ -50,7 +50,9 @@ export interface CategoryProps {
   level0: string;
   level1: Array<string>;
   date: string;
+  [key: string]: any;
 }
+
 export interface ProductProps {
   id: string;
   title: string;
@@ -69,6 +71,8 @@ export interface ProductProps {
   detail?: string;
   describe?: string;
   level1?: string;
+  level2?: string;
+
   Keyword?: [] | any;
 }
 

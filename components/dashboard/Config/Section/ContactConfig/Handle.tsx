@@ -11,12 +11,10 @@ import React from 'react';
 
 const Handle = ({ setIsOpen }: { setIsOpen: (isOpen: boolean) => void }) => {
   const router = useRouter();
-  const { setFormData, FormData, setIsLoading } = useStateProvider();
+  const { setFormData, FormData } = useStateProvider();
   const { currentUser } = useAuth();
 
   const HandleSubmit = async () => {
-    setIsLoading(2000);
-
     await updateOne(currentUser.firebaseConfig, 'Config', 'contact', {
       ...FormData,
       id: 'contact',

@@ -23,7 +23,7 @@ const LoginPage = async ({
   return (
     <div className="w-screen h-screen relative">
       <ParticlesCustom />
-      <div className="bg-none w-full h-full relative z-20 flex justify-center items-center">
+      <div className="bg-none w-full h-full relative z-20 flex justify-center items-center px-2">
         <Login Lang={params.lang} dict={dict} Data={Accounts} />
       </div>
       <div className="absolute top-5 right-20 flex items-center gap-2 text-[14px] text-gray-400">

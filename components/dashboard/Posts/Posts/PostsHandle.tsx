@@ -30,17 +30,21 @@ const PostsHandle = ({
 
   useEffect(() => {
     const randomText = Math.floor(Math.random() * 100000000000);
-    const headUrl = slugify(`${FormData?.title}-p${randomText}.html`, {
+    // const headUrl = slugify(`${FormData?.title}-p${randomText}.html`, {
+    //   lower: true,
+    //   locale: 'vi',
+    // });
+    const headUrl = slugify(FormData.title ? FormData.title : '', {
       lower: true,
       locale: 'vi',
     });
-    setFormData({
-      ...FormData,
-      stt: postsLength,
-      url: `${headUrl}?poid=${
-        postsLength ? 100000000000 + postsLength : 100000000000
-      }`,
-    });
+    if (Type !== 'update') {
+      setFormData({
+        ...FormData,
+        stt: postsLength,
+        url: headUrl,
+      });
+    }
   }, [FormData?.title]);
 
   const HandleSubmit = async () => {
@@ -49,17 +53,16 @@ const PostsHandle = ({
         message: 'Vui lòng nhập tiêu đề!',
         description: 'Tiêu đề không được để trống!!!',
       });
-    } else if (!FormData?.level0) {
-      notification.error({
-        message: 'Vui lòng chọn danh mục!',
-      });
     } else {
       const level0 = slugify(`${FormData?.level0}`, {
         lower: true,
         locale: 'vi',
       });
       if (Type === 'update') {
-        let Data = { ...FormData, level0: level0 };
+        let Data = {
+          ...FormData,
+          level0: level0,
+        };
         updateOne(currentUser.firebaseConfig, 'Posts', Data.id, Data).then(
           () => {
             setIsOpen(false);
@@ -67,7 +70,10 @@ const PostsHandle = ({
           }
         );
       } else {
-        let Data = { ...FormData, level0: level0 };
+        let Data = {
+          ...FormData,
+          level0: `${FormData?.level0 === undefined ? 'root' : level0}`,
+        };
 
         await insertAndCustomizeId(
           currentUser.firebaseConfig,

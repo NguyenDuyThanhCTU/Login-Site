@@ -206,8 +206,10 @@ const DashboardPage = async ({ searchParams, params }: DashboardPageProps) => {
 
   return (
     <div className="font-LexendDeca font-extralight ">
-      <Header dict={dict} Key={keyValue} />
-      <div className="p:mt-[84px] d:mt-[64px] bg-slate-100 py-5  d:mx-auto p:mx-2 d:text-[18px] p:text-[14px]">
+      <div className="fixed w-full top-0 z-50">
+        <Header dict={dict} Key={keyValue} />
+      </div>
+      <div className="p:mt-[84px] d:mt-[64px] py-5  d:mx-auto p:mx-2 d:text-[18px] p:text-[14px]  bg-slate-100 overflow-y-hidden overflow-x-auto">
         {componentToRender}
       </div>
     </div>

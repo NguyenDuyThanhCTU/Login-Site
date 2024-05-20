@@ -115,7 +115,7 @@ const Login = ({ Lang, dict, Data }: LoginProps) => {
   };
 
   return (
-    <div className="bg-white min-w-[350px] ">
+    <div className="bg-white p:w-auto d:min-w-[350px] rounded-md ">
       <div className="p-10">
         <div className="text-center font-semibold flex flex-col gap-2">
           <h1 className=" text-[25px]">{dict.LoginPage.HeaderTitle}</h1>

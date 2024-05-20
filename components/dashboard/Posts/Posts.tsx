@@ -145,7 +145,9 @@ const Posts = ({ Category, PostsData }: PostsProps) => {
         <PostsHandle
           setIsOpen={setIsAddModel}
           Category={Category}
-          postsLength={Data === undefined ? 0 : getHighestNumber(Data) + 1}
+          postsLength={
+            PostsData === undefined ? 0 : getHighestNumber(PostsData) + 1
+          }
         />
       </Modal>
 

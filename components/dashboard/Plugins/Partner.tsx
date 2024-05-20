@@ -73,7 +73,7 @@ const Partner = ({ Data }: { Data: PartnerProps[] }) => {
       >
         <Handle
           setIsOpen={setIsOpenUpdate}
-          partnerLength={FormData.stt}
+          partnerLength={FormData?.stt}
           Type="update"
         />
       </Modal>
