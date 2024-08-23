@@ -11,7 +11,7 @@ import React from 'react';
 
 const Handle = ({ setIsOpen }: { setIsOpen: (isOpen: boolean) => void }) => {
   const router = useRouter();
-  const { setFormData, FormData } = useStateProvider();
+  const { setFormData, FormData, isLanguage } = useStateProvider();
   const { currentUser } = useAuth();
 
   const HandleSubmit = async () => {
@@ -34,95 +34,193 @@ const Handle = ({ setIsOpen }: { setIsOpen: (isOpen: boolean) => void }) => {
   return (
     <div>
       <div className="p-2 flex flex-col gap-2">
-        <div className="flex flex-col gap-2">
-          <div className="grid p:grid-cols-1 d:grid-cols-2 gap-2">
-            <div className="border border-black rounded-lg">
-              <div className="p-2 flex flex-col gap-2">
-                <InputForm
-                  Label="Địa chỉ website"
-                  Type="Input"
-                  field={'WebsiteAddress'}
-                />
-                <InputForm
-                  Label="Số điện thoại"
-                  Type="Input"
-                  field={'Hotline'}
-                />
+        {isLanguage ? (
+          <>
+            {' '}
+            <div className="flex flex-col gap-2">
+              <div className="grid p:grid-cols-1 d:grid-cols-2 gap-2">
+                <div className="border border-black rounded-lg">
+                  <div className="p-2 flex flex-col gap-2">
+                    <InputForm
+                      Label="Địa chỉ website"
+                      Type="Input"
+                      field={'WebsiteAddress'}
+                    />
+                    <InputForm
+                      Label="Số điện thoại"
+                      Type="Input"
+                      field={'Hotline'}
+                    />
 
-                <InputForm
-                  Label="Số điện thoại (phụ)"
-                  Type="Input"
-                  field={'PhoneNumber'}
-                />
-                <InputForm
-                  Label="Hotline hỗ trợ kỹ thuật"
-                  Type="Input"
-                  field={'TechnicalHotline'}
-                />
+                    <InputForm
+                      Label="Số điện thoại (phụ)"
+                      Type="Input"
+                      field={'PhoneNumber'}
+                    />
+                    <InputForm
+                      Label="Hotline hỗ trợ kỹ thuật"
+                      Type="Input"
+                      field={'TechnicalHotline'}
+                    />
+                  </div>
+                </div>
+                <div className="border border-black rounded-lg">
+                  <div className="p-2 flex flex-col gap-2">
+                    <InputForm Label="Email" Type="Input" field={'Email'} />
+                    <InputForm
+                      Label="Thời gian hoạt động website"
+                      Type="Input"
+                      field={'WebsiteTime'}
+                    />
+                    <InputForm
+                      Label="Thời gian hoạt động của công ty"
+                      Type="Input"
+                      field={'CompanyTime'}
+                    />
+                  </div>
+                </div>
               </div>
-            </div>
-            <div className="border border-black rounded-lg">
-              <div className="p-2 flex flex-col gap-2">
-                <InputForm Label="Email" Type="Input" field={'Email'} />
-                <InputForm
-                  Label="Thời gian hoạt động website"
-                  Type="Input"
-                  field={'WebsiteTime'}
-                />
-                <InputForm
-                  Label="Thời gian hoạt động của công ty"
-                  Type="Input"
-                  field={'CompanyTime'}
-                />
-              </div>
-            </div>
-          </div>
-          <div className="border border-black rounded-lg">
-            <div className="p-2 flex flex-col gap-2">
-              <InputForm
-                Label="Địa chỉ (chi nhánh chính)"
-                Type="Input"
-                field={'CompanyAddress'}
-              />
-              <InputForm
-                Label="Liên kết chỉ đường"
-                Type="Input"
-                field={'direct'}
-              />
-              <div className="grid grid-cols-2 gap-2">
-                <InputForm
-                  Label="Logo website"
-                  Type="Upload"
-                  field={'LogoWebsite'}
-                />
-                <div>
+              <div className="border border-black rounded-lg">
+                <div className="p-2 flex flex-col gap-2">
                   <InputForm
-                    Label="Vị trí (Google map)"
+                    Label="Địa chỉ (chi nhánh chính)"
                     Type="Input"
-                    field={'GoogleMap'}
+                    field={'CompanyAddress'}
                   />
-                  {FormData?.GoogleMap && (
-                    <div className="flex mt-2 gap-2">
-                      <div>
-                        <div
-                          className="py-2 px-5 rounded-lg cursor-pointer bg-lime-400 w-max hover:bg-lime-600 duration-300"
-                          onClick={() => HandleCheckGoogleMap()}
-                        >
-                          Kiểm tra
+                  <InputForm
+                    Label="Liên kết chỉ đường"
+                    Type="Input"
+                    field={'direct'}
+                  />
+                  <div className="grid grid-cols-2 gap-2">
+                    <InputForm
+                      Label="Logo website"
+                      Type="Upload"
+                      field={'LogoWebsite'}
+                    />
+                    <div>
+                      <InputForm
+                        Label="Vị trí (Google map)"
+                        Type="Input"
+                        field={'GoogleMap'}
+                      />
+                      {FormData?.GoogleMap && (
+                        <div className="flex mt-2 gap-2">
+                          <div>
+                            <div
+                              className="py-2 px-5 rounded-lg cursor-pointer bg-lime-400 w-max hover:bg-lime-600 duration-300"
+                              onClick={() => HandleCheckGoogleMap()}
+                            >
+                              Kiểm tra
+                            </div>
+                          </div>
+                          <iframe
+                            src={FormData?.GoogleMap}
+                            loading="lazy"
+                            className="w-full h-full outline-none"
+                          ></iframe>
                         </div>
-                      </div>
-                      <iframe
-                        src={FormData?.GoogleMap}
-                        loading="lazy"
-                        className="w-full h-full outline-none"
-                      ></iframe>
+                      )}
                     </div>
-                  )}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
+          </>
+        ) : (
+          <>
+            {' '}
+            <div className="flex flex-col gap-2">
+              <div className="grid p:grid-cols-1 d:grid-cols-2 gap-2">
+                <div className="border border-black rounded-lg">
+                  <div className="p-2 flex flex-col gap-2">
+                    <InputForm
+                      Label="Website address"
+                      Type="Input"
+                      field={'WebsiteAddress'}
+                    />
+                    <InputForm
+                      Label="Phone Number"
+                      Type="Input"
+                      field={'HotlineEN'}
+                    />
+
+                    <InputForm
+                      Label="Phone Number (Sub)"
+                      Type="Input"
+                      field={'PhoneNumberEN'}
+                    />
+                    <InputForm
+                      Label="Technical support hotline"
+                      Type="Input"
+                      field={'TechnicalHotlineEN'}
+                    />
+                  </div>
+                </div>
+                <div className="border border-black rounded-lg">
+                  <div className="p-2 flex flex-col gap-2">
+                    <InputForm Label="Email" Type="Input" field={'Email'} />
+                    <InputForm
+                      Label="Website uptime"
+                      Type="Input"
+                      field={'WebsiteTimeEN'}
+                    />
+                    <InputForm
+                      Label="Company uptime"
+                      Type="Input"
+                      field={'CompanyTimeEN'}
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="border border-black rounded-lg">
+                <div className="p-2 flex flex-col gap-2">
+                  <InputForm
+                    Label="Address (main branch)"
+                    Type="Input"
+                    field={'CompanyAddressEN'}
+                  />
+                  <InputForm
+                    Label="Directions link"
+                    Type="Input"
+                    field={'direct'}
+                  />
+                  <div className="grid grid-cols-2 gap-2">
+                    <InputForm
+                      Label="Logo website"
+                      Type="Upload"
+                      field={'LogoWebsite'}
+                    />
+                    <div>
+                      <InputForm
+                        Label="Location (Google map)"
+                        Type="Input"
+                        field={'GoogleMap'}
+                      />
+                      {FormData?.GoogleMap && (
+                        <div className="flex mt-2 gap-2">
+                          <div>
+                            <div
+                              className="py-2 px-5 rounded-lg cursor-pointer bg-lime-400 w-max hover:bg-lime-600 duration-300"
+                              onClick={() => HandleCheckGoogleMap()}
+                            >
+                              Kiểm tra
+                            </div>
+                          </div>
+                          <iframe
+                            src={FormData?.GoogleMap}
+                            loading="lazy"
+                            className="w-full h-full outline-none"
+                          ></iframe>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </>
+        )}
 
         <div className="flex w-full justify-end">
           <div

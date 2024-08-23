@@ -21,12 +21,11 @@ const TextEditor = ({
   const [editorData, setEditorData] = useState(initialValue);
   const editorRef = useRef<any>();
   const [editorLoaded, setEditorLoaded] = useState(false);
-  const { CKEditor, ClassicEditor }: any = editorRef.current || {};
+  const { CKEditor }: any = editorRef.current || {};
 
   useEffect(() => {
     editorRef.current = {
       CKEditor: require('@ckeditor/ckeditor5-react').CKEditor, // v3+
-      // ClassicEditor: require('@ckeditor/ckeditor5-build-classic'),
     };
     setEditorLoaded(true);
   }, []);

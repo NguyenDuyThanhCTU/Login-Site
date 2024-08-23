@@ -14,7 +14,7 @@ export const BasicSEOForm = ({
   setIsOpen: (isOpen: boolean) => void;
 }) => {
   const router = useRouter();
-  const { FormData } = useStateProvider();
+  const { FormData, isLanguage } = useStateProvider();
   const { currentUser } = useAuth();
   const HandleSubmit = async () => {
     await updateOne(currentUser.firebaseConfig, 'Config', 'SEOconfig', {
@@ -27,10 +27,25 @@ export const BasicSEOForm = ({
   };
   return (
     <div className="p-2 flex flex-col gap-2">
-      <InputForm Label="Tiêu đề trang" Type="Input" field="Title" />
-      <InputForm Label="Thẻ mô tả" Type="Input" field="Description" />
-      <InputForm Label="Thẻ từ khóa" Type="Input" field="Keyword" />
-
+      {isLanguage ? (
+        <>
+          {' '}
+          <InputForm Label="Tiêu đề trang" Type="Input" field="Title" />
+          <InputForm Label="Thẻ mô tả" Type="Input" field="Description" />
+          <InputForm Label="Thẻ từ khóa" Type="Input" field="Keyword" />
+        </>
+      ) : (
+        <>
+          {' '}
+          <InputForm Label="Title Tag" Type="Input" field="TitleEN" />
+          <InputForm
+            Label="Description Tag"
+            Type="Input"
+            field="DescriptionEN"
+          />
+          <InputForm Label="Keyword Tag" Type="Input" field="KeywordEN" />
+        </>
+      )}
       <InputForm Label="Favicon" Type="Upload" field="Favicon" />
 
       <div className="flex w-full justify-end">

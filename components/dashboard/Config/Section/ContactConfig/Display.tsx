@@ -1,5 +1,7 @@
+'use client';
 import { ContactProps } from '@assets/props';
 import HeaderBox from '@components/dashboard/items/UI/HeaderBox';
+import { useStateProvider } from '@context/StateProvider';
 import { Tooltip } from 'antd';
 import Image from 'next/image';
 import React from 'react';
@@ -17,6 +19,7 @@ type ContactItemsProps = {
 };
 
 const ContactBox = ({ setIsOpen, Data }: ContactBoxProps) => {
+  const { isLanguage } = useStateProvider();
   const ContactItems: ContactItemsProps[] = [
     {
       label: 'Địa chỉ website',
@@ -26,12 +29,12 @@ const ContactBox = ({ setIsOpen, Data }: ContactBoxProps) => {
     },
     {
       label: 'Số điện thoại',
-      value: Data?.Hotline,
+      value: isLanguage ? Data?.Hotline : Data?.HotlineEN,
       tooltip: '',
     },
     {
       label: 'Số điện thoại (phụ)',
-      value: Data?.PhoneNumber,
+      value: isLanguage ? Data?.PhoneNumber : Data?.PhoneNumberEN,
       tooltip: '',
     },
     {
@@ -41,17 +44,17 @@ const ContactBox = ({ setIsOpen, Data }: ContactBoxProps) => {
     },
     {
       label: 'Thời gian hoạt động website',
-      value: Data?.WebsiteTime,
+      value: isLanguage ? Data?.WebsiteTime : Data?.WebsiteTimeEN,
       tooltip: '',
     },
     {
       label: 'Thời gian hoạt động của công ty',
-      value: Data?.CompanyTime,
+      value: isLanguage ? Data?.CompanyTime : Data?.CompanyTimeEN,
       tooltip: '',
     },
     {
       label: 'Địa chỉ (chi nhánh chính)',
-      value: Data?.CompanyAddress,
+      value: isLanguage ? Data?.CompanyAddress : Data?.CompanyAddressEN,
       tooltip: '',
     },
 

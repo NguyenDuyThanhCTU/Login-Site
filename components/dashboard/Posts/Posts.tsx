@@ -32,10 +32,10 @@ const Posts = ({ Category, PostsData }: PostsProps) => {
 
   useEffect(() => {
     const policy = PostsData?.filter(
-      (item) => item.level0 === 'dieu-khoan-su-dung'
+      (item) => item.level0 === 'dieu-khoan-su-dung' || item.level0 === 'policy'
     );
     const other = PostsData?.filter(
-      (item) => item.level0 !== 'dieu-khoan-su-dung'
+      (item) => item.level0 !== 'dieu-khoan-su-dung' && item.level0 !== 'policy'
     );
     setPolicy(policy);
     setData(other);
@@ -105,7 +105,7 @@ const Posts = ({ Category, PostsData }: PostsProps) => {
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <FileSaver Data={Data} />
+          {/* <FileSaver Data={Data} /> */}
           <Search Data={Data} Select={HandleOpenForm} Field="title" />
           <SortTable Data={DataShow} setData={setDataFilter} Field="title" />
         </div>

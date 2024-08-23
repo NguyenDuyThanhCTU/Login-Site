@@ -17,6 +17,7 @@ import {
   TwitterBox,
 } from './InformationConfig/Display';
 import { InformationProps } from '@assets/props';
+import HandleTag from '@components/dashboard/items/Handle/Keyword';
 
 const InformationConfig = ({ Data }: { Data: Array<any> }) => {
   const [isOpen404Modal, setIsOpen404Modal] = useState(false);
@@ -75,27 +76,27 @@ const InformationConfig = ({ Data }: { Data: Array<any> }) => {
   ];
   return (
     <div className="pb-5 ">
+      <div className="px-10 py-4">
+        <h1 className="text-[30px] font-semibold"> Cấu Hình Website </h1>
+        <p className=" text-gray-500">
+          Đây là những gì khách hàng đang nhìn thấy từ website của bạn
+        </p>
+      </div>
       <div className="w-full grid p:grid-cols-1 d:grid-cols-2 p:px-0 d:px-10 font-light gap-5">
-        <div>
-          <div className="">
-            <h1 className="text-[30px] font-semibold"> Cấu Hình Website </h1>
-            <p className=" text-gray-500">
-              Đây là những gì khách hàng đang nhìn thấy từ website của bạn
-            </p>
+        <div className="grid grid-cols-1 gap-4 ">
+          <div className="grid p:grid-cols-1 d:grid-cols-2 gap-3">
+            <ErrorBox setIsOpen={Handle} Data={Data} />
+            <LogoBox setIsOpen={Handle} Data={Data} Logo={LogoPosition} />
           </div>
-          <div className="grid grid-cols-1 gap-4 mt-5">
-            <div className="grid p:grid-cols-1 d:grid-cols-2 gap-3">
-              <ErrorBox setIsOpen={Handle} Data={Data} />
-              <LogoBox setIsOpen={Handle} Data={Data} Logo={LogoPosition} />
-            </div>
-            <EmbedBox setIsOpen={Handle} Data={Data} />
-          </div>
+          <EmbedBox setIsOpen={Handle} Data={Data} />
         </div>
+
         <div className="grid grid-cols-1 gap-4 ">
           <div className="grid p:grid-cols-1 d:grid-cols-2 gap-3">
             <FacebookBox setIsOpen={Handle} Data={Data} />
             <TwitterBox setIsOpen={Handle} Data={Data} />
           </div>
+          <HandleTag Data={informationData} />
         </div>
       </div>
 

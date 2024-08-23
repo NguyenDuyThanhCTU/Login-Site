@@ -26,9 +26,10 @@ const PostIntroductory = ({ Data }: { Data: introductoryProps }) => {
     });
   };
 
-  useEffect(() => {
+  const HandleOpenForm = () => {
+    setIsOpenModal(true);
     setFormData(Data);
-  }, [isOpenModal]);
+  };
 
   return (
     <div className="w-full px-2 font-light gap-10   bg-white py-10 ">
@@ -41,7 +42,7 @@ const PostIntroductory = ({ Data }: { Data: introductoryProps }) => {
         </div>
         <div>
           <CRUDButton
-            Clicked={setIsOpenModal}
+            Clicked={HandleOpenForm}
             Label="Chỉnh Sửa"
             value="bài giới thiệu"
             Style="hover:bg-cyan-900 bg-cyan-700"

@@ -1,6 +1,6 @@
 'use client';
 import Image from 'next/image';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Notification from './Home/Notification';
 import localFont from 'next/font/local';
 
@@ -13,9 +13,19 @@ import { FunctionItem } from '@components/layout/dashboard/items/items';
 import { PostProps } from '@assets/props';
 import { useAuth } from '@context/AuthProviders';
 
-const AdminPage = ({ Data }: { Data: PostProps }) => {
+const AdminPage = ({
+  Data,
+  Config,
+}: {
+  Data: PostProps[];
+  Config: Array<any>;
+}) => {
   const [isNotification, setIsNotification] = useState(true);
-  const { HandleDashboardNavigate, websiteUrl } = useAuth();
+  const { HandleDashboardNavigate, setConfigData } = useAuth();
+
+  useEffect(() => {
+    setConfigData(Config);
+  }, [Config]);
   return (
     <>
       <div className="d:w-[1200px] p:mx-auto mx-auto flex flex-col gap-5">

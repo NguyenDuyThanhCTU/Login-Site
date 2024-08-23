@@ -11,7 +11,7 @@ import { AdvanceSEOForm, BasicSEOForm } from './SeoConfig/Handle';
 const SeoConfig = ({ Data }: { Data: Array<any> }) => {
   const [isOpenBasicSEO, setIsOpenBasicSEO] = useState(false);
   const [isOpenAdvanceSEO, setIsOpenAdvanceSEO] = useState(false);
-  const { setFormData } = useStateProvider();
+  const { setFormData, isLanguage } = useStateProvider();
   const contactData: ContactProps = Data?.find(
     (item: any) => item.id === 'contact'
   );
@@ -61,7 +61,9 @@ const SeoConfig = ({ Data }: { Data: Array<any> }) => {
                     />{' '}
                     <div>
                       <p className="text-[22px] font-normal">
-                        {SEOconfigData?.Title}
+                        {isLanguage
+                          ? SEOconfigData?.Title
+                          : SEOconfigData?.TitleEN}
                       </p>
                       <p className="text-[#006621] ">
                         {contactData?.WebsiteAddress}
@@ -69,7 +71,11 @@ const SeoConfig = ({ Data }: { Data: Array<any> }) => {
                     </div>
                   </h2>
 
-                  <p className="mt-3">{SEOconfigData?.Description}</p>
+                  <p className="mt-3">
+                    {isLanguage
+                      ? SEOconfigData?.Description
+                      : SEOconfigData?.DescriptionEN}
+                  </p>
                 </div>
               </div>
             </div>

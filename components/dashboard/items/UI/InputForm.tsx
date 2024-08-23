@@ -6,8 +6,15 @@ import { useStateProvider } from '@context/StateProvider';
 import { FaEyeSlash } from 'react-icons/fa';
 import { IoEyeSharp } from 'react-icons/io5';
 import ImageUploader from '../Handle/ImageUploader';
-import TextEditor from '../TextEditor/TextEditor';
 import { useAuth } from '@context/AuthProviders';
+import dynamic from 'next/dynamic';
+
+const TextEditor = dynamic(
+  () => {
+    return import('../TextEditor/TextEditor');
+  },
+  { ssr: false }
+);
 
 interface InputFormProps {
   Label: string;
@@ -198,7 +205,7 @@ const InputForm = ({
               <textarea
                 placeholder={PlaceHolder ? PlaceHolder : ''}
                 className=" outline-none w-full "
-                value={FormData[field] === undefined ? '' : FormData[field]}
+                value={FormData === undefined ? '' : FormData[field]}
                 onChange={(e) =>
                   setFormData({ ...FormData, [field]: e.target.value })
                 }

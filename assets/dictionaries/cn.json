@@ -55,12 +55,8 @@
               "label": "Danh Mục Bài Viết",
               "value": "danh-muc-bai-viet",
               "icon": "CgListTree"
-            },
-            {
-              "label": "Bài giới thiệu",
-              "value": "bai-gioi-thieu",
-              "icon": "BsFileEarmarkPost"
             }
+       
           ]
         },
         {
@@ -112,11 +108,7 @@
               "value": "luot-truy-cap",
               "icon": "BiLoader"
             },
-            {
-              "label": "Phản Hồi của Khách Hàng",
-              "value": "phan-hoi-cua-khach-hang",
-              "icon": "BiPencil"
-            },
+        
             {
               "label": "Đơn Hàng",
               "value": "don-hang",
@@ -143,7 +135,11 @@
               "label": "Đối Tác",
               "value": "doi-tac",
               "icon": "LuGitCompare"
-
+            },
+            {
+              "label": "Phản Hồi của Khách Hàng",
+              "value": "phan-hoi-cua-khach-hang",
+              "icon": "BiPencil"
             }
           ]
         }
@@ -208,11 +204,15 @@
               "value": "chi-nhanh",
               "icon": "GoGitBranch"
             },
-            {
+              {
               "label": "Đối Tác",
               "value": "doi-tac",
               "icon": "LuGitCompare"
-
+            },
+            {
+              "label": "Phản Hồi của Khách Hàng",
+              "value": "phan-hoi-cua-khach-hang",
+              "icon": "BiPencil"
             }
           ]
         }
@@ -292,11 +292,7 @@
               "value": "luot-truy-cap",
               "icon": "BiLoader"
             },
-            {
-              "label": "Phản Hồi của Khách Hàng",
-              "value": "phan-hoi-cua-khach-hang",
-              "icon": "BiPencil"
-            },
+         
             {
               "label": "Đơn Hàng",
               "value": "don-hang",
@@ -323,7 +319,11 @@
               "label": "Đối Tác",
               "value": "doi-tac",
               "icon": "LuGitCompare"
-
+            },
+            {
+              "label": "Phản Hồi của Khách Hàng",
+              "value": "phan-hoi-cua-khach-hang",
+              "icon": "BiPencil"
             }
           ]
         }
@@ -366,12 +366,8 @@
               "label": "Danh Mục Bài Viết",
               "value": "danh-muc-bai-viet",
               "icon": "CgListTree"
-            },
-            {
-              "label": "Bài giới thiệu",
-              "value": "bai-gioi-thieu",
-              "icon": "BsFileEarmarkPost"
             }
+       
           ]
         },
         {
@@ -419,11 +415,7 @@
               "value": "luot-truy-cap",
               "icon": "BiLoader"
             },
-            {
-              "label": "Phản Hồi của Khách Hàng",
-              "value": "phan-hoi-cua-khach-hang",
-              "icon": "BiPencil"
-            },
+          
             {
               "label": "Đơn Hàng",
               "value": "don-hang",
@@ -450,7 +442,11 @@
               "label": "Đối Tác",
               "value": "doi-tac",
               "icon": "LuGitCompare"
-
+            },
+            {
+              "label": "Phản Hồi của Khách Hàng",
+              "value": "phan-hoi-cua-khach-hang",
+              "icon": "BiPencil"
             }
           ]
         }
@@ -493,12 +489,8 @@
               "label": "Danh Mục Bài Viết",
               "value": "danh-muc-bai-viet",
               "icon": "CgListTree"
-            },
-            {
-              "label": "Bài giới thiệu",
-              "value": "bai-gioi-thieu",
-              "icon": "BsFileEarmarkPost"
             }
+     
           ]
         },
         {
@@ -550,11 +542,7 @@
               "value": "luot-truy-cap",
               "icon": "BiLoader"
             },
-            {
-              "label": "Phản Hồi của Khách Hàng",
-              "value": "phan-hoi-cua-khach-hang",
-              "icon": "BiPencil"
-            },
+         
             {
               "label": "Đơn Hàng",
               "value": "don-hang",
@@ -582,6 +570,11 @@
               "value": "doi-tac",
               "icon": "LuGitCompare"
 
+            },
+            {
+              "label": "Phản Hồi của Khách Hàng",
+              "value": "phan-hoi-cua-khach-hang",
+              "icon": "BiPencil"
             }
           ]
         }

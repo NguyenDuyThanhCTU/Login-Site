@@ -110,81 +110,59 @@ export async function find(
   CollectionName: string,
   Signal?: boolean
 ) {
+  let documents: any[] = [];
   let firebaseEndpoint: string;
   firebaseEndpoint = `https://firestore.googleapis.com/v1/projects/${dbConfig.projectId}/databases/(default)/documents/${CollectionName}`;
-  try {
-    const response = await fetch(firebaseEndpoint, {
-      next: { revalidate: Signal ? 0 : 1800 },
-    });
+  let idx = 0;
 
-    if (!response.ok) {
-      throw new Error('Network response was not ok.');
-    }
-    const data = await response.json();
-
-    const documents = data.documents.map((doc: any) => {
-      const formattedDoc: any = {
-        id: doc.name.split('/').pop(),
-      };
-
-      for (const field in doc.fields) {
-        if (Object.prototype.hasOwnProperty.call(doc.fields, field)) {
-          formattedDoc[field] = convertFieldValue(doc.fields[field]);
+  async function fetchAndProcessData(nextPageToken?: string) {
+    idx += 1;
+    try {
+      const response = await fetch(
+        nextPageToken
+          ? `${firebaseEndpoint}?pageToken=${nextPageToken}`
+          : firebaseEndpoint,
+        {
+          next: { revalidate: Signal ? 0 : 1800 },
         }
+      );
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok.');
       }
 
-      formattedDoc.date = convertDate(formattedDoc.createdAt);
+      const data = await response.json();
 
-      return formattedDoc;
-    });
+      // documents = [...documents, ...data.documents];
+      documents.push(
+        ...data.documents.map((doc: any) => {
+          const formattedDoc: any = {
+            id: doc.name.split('/').pop(),
+          };
 
-    documents.sort((a: any, b: any) => {
-      return a.stt - b.stt;
-    });
-    return documents;
-  } catch (error) {
-    console.error('Lỗi khi lấy dữ liệu:', error);
+          for (const field in doc.fields) {
+            if (Object.prototype.hasOwnProperty.call(doc.fields, field)) {
+              formattedDoc[field] = convertFieldValue(doc.fields[field]);
+            }
+          }
+
+          formattedDoc.date = convertDate(formattedDoc.createdAt);
+          return formattedDoc;
+        })
+      );
+      if (data.nextPageToken) {
+        await fetchAndProcessData(data.nextPageToken);
+      }
+    } catch (error) {
+      console.error('Error getting data:', error);
+    }
   }
+
+  await fetchAndProcessData();
+
+  documents.sort((a: any, b: any) => a.stt - b.stt);
+  return documents;
 }
-
-// export async function find(
-//   dbConfig: FirebaseConfigProps,
-//   CollectionName: string,
-//   Signal?: boolean
-// ) {
-//   let firebaseEndpoint: string;
-//   firebaseEndpoint = `https://firestore.googleapis.com/v1/projects/${dbConfig.projectId}/databases/(default)/documents/${CollectionName}`;
-//   try {
-//     const response = await fetch(firebaseEndpoint, {
-//       next: { revalidate: Signal ? 0 : 1800 },
-//     });
-
-//     if (!response.ok) {
-//       throw new Error('Network response was not ok.');
-//     }
-//     const data = await response.json();
-
-//     const documents = data.documents.map((doc: any) => {
-//       const formattedDoc: any = {
-//         id: doc.name.split('/').pop(),
-//       };
-
-//       for (const field in doc.fields) {
-//         if (Object.prototype.hasOwnProperty.call(doc.fields, field)) {
-//           formattedDoc[field] = convertFieldValue(doc.fields[field]);
-//         }
-//       }
-
-//       formattedDoc.date = convertDate(formattedDoc.createdAt);
-
-//       return formattedDoc;
-//     });
-//     return documents;
-//   } catch (error) {
-//     console.error('Lỗi khi lấy dữ liệu:', error);
-//     // throw new Error("Failed to fetch data.");
-//   }
-// }
 
 export const findLimi1 = async (
   dbConfig: FirebaseConfigProps,

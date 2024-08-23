@@ -47,7 +47,6 @@ export const uploadImage = async (
       let storageRef = ref(storage, `${locate}/${selectImage.name}`);
 
       const snapshot = await uploadBytes(storageRef, selectImage);
-      // console.log(`${storage}, ${locate}/${selectImage.name}`);
 
       const url = await getDownloadURL(snapshot.ref);
 
@@ -127,3 +126,13 @@ export const randomString = () => {
     result += chars[Math.floor(Math.random() * chars.length)];
   return result;
 };
+
+export function formDataToData(formData: any, fields: Array<any>) {
+  const result: any = {};
+  fields.forEach((field) => {
+    if (formData.hasOwnProperty(field)) {
+      result[field] = formData[field];
+    }
+  });
+  return result;
+}

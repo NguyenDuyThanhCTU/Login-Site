@@ -9,6 +9,7 @@ import { BsPostcard, BsFileEarmarkPost } from 'react-icons/bs';
 import { AiOutlineProfile } from 'react-icons/ai';
 
 import {
+  BiCheckCircle,
   BiCube,
   BiHappy,
   BiHive,
@@ -32,6 +33,7 @@ interface IconMappingType {
 }
 
 export const DashboardMapping: IconMappingType = {
+  BiCheckCircle: BiCheckCircle,
   IoSettingsOutline: IoSettingsOutline,
   GiStarSattelites: GiStarSattelites,
   PiCirclesThreePlusDuotone: PiCirclesThreePlusDuotone,

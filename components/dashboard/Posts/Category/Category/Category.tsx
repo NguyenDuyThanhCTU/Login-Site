@@ -7,9 +7,9 @@ import { useStateProvider } from '@context/StateProvider';
 import { CategoryProps } from '@assets/props';
 import CRUDButton from '@components/dashboard/items/UI/CRUDButton';
 import PostsCategoryBox from './Display';
-import PostsCategoryForm from './Create';
 import { getHighestNumber } from '@components/dashboard/items/Handle/Handle';
 import Heading from '@components/dashboard/items/UI/Heading';
+import { PostsCategoryForm } from './Create';
 
 const Category = ({ Data }: { Data: CategoryProps[] }) => {
   const [isAddModel, setIsAddModel] = useState<boolean>(false);

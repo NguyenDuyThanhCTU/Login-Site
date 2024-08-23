@@ -23,11 +23,17 @@ export function convertFieldValue(field: any): any {
     return new Date(field.timestampValue);
   } else if (field.booleanValue !== undefined) {
     return field.booleanValue;
-  } else if (field.arrayValue !== undefined) {
+  } else if (
+    field.arrayValue !== undefined &&
+    Array.isArray(field.arrayValue.values)
+  ) {
     return field.arrayValue.values.map((value: any) =>
       convertFieldValue(value)
     );
-  } else if (field.mapValue !== undefined) {
+  } else if (
+    field.mapValue !== undefined &&
+    field.mapValue.fields !== undefined
+  ) {
     const mapData: any = {};
     for (const key in field.mapValue.fields) {
       if (Object.prototype.hasOwnProperty.call(field.mapValue.fields, key)) {

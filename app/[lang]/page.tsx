@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { getDictionary } from './dictionaries';
 import { find } from '@config/api/api';
 import { firebaseConfig } from '@config/firebase/Firebase';
+import Test from '@components/dashboard/Test/Test';
 
 export const metadata: Metadata = {
   title: 'Đăng nhập Hệ Thống',
@@ -20,6 +21,7 @@ const LoginPage = async ({
 }) => {
   const dict = await getDictionary(params.lang);
   const Accounts = await find(firebaseConfig, 'Accounts', true);
+
   return (
     <div className="w-screen h-screen relative">
       <ParticlesCustom />
@@ -55,8 +57,8 @@ const LoginPage = async ({
           apply.
         </div>
       </div>
+      {/* <Test /> */}
     </div>
   );
 };
-
 export default LoginPage;

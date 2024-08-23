@@ -9,7 +9,8 @@ interface Props {
 export type StateContextType = {
   isLoading: number;
   setIsLoading: (loading: any) => void;
-
+  isLanguage: boolean;
+  setLanguage: (isLanguage: boolean) => void;
   FormData: any;
   setFormData: (formData: any) => void;
   HandleNavigate: (url: any) => void;
@@ -18,7 +19,8 @@ export type StateContextType = {
 export const StateContext = createContext<StateContextType>({
   isLoading: 0,
   setIsLoading: () => {},
-
+  isLanguage: true,
+  setLanguage: () => {},
   FormData: {},
   setFormData: () => {},
   HandleNavigate: () => {},
@@ -26,7 +28,7 @@ export const StateContext = createContext<StateContextType>({
 
 export const StateProvider = ({ children }: Props) => {
   const [isLoading, setIsLoading] = useState(0);
-
+  const [isLanguage, setLanguage] = useState(true);
   const router = useRouter();
   const HandleNavigate = (url: any) => {
     router.push(url);
@@ -40,7 +42,8 @@ export const StateProvider = ({ children }: Props) => {
         HandleNavigate,
         FormData,
         setFormData,
-
+        isLanguage,
+        setLanguage,
         isLoading,
         setIsLoading,
       }}

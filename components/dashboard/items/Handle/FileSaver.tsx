@@ -5,18 +5,24 @@ import XlsxPopulate from 'xlsx-populate';
 interface FileSaverProps {
   Data: Array<any>;
 }
+
 const FileSaver = ({ Data }: FileSaverProps) => {
   function getSheetData(data: any, header: any) {
     var fields = Object.keys(data[0]);
     var sheetData = data.map(function (row: any) {
       return fields.map(function (fieldName) {
-        return row[fieldName] ? row[fieldName] : '';
+        let value = row[fieldName];
+        if (Array.isArray(value)) {
+          // Chuyển đổi mảng thành chuỗi để lưu vào Excel
+          return value.join(', ');
+        }
+        return value ? value : '';
       });
     });
     sheetData.unshift(header);
+    console.log(sheetData);
     return sheetData;
   }
-
   async function HandleExportExcel() {
     var data = Data;
     //get all header from Data keys
@@ -33,9 +39,9 @@ const FileSaver = ({ Data }: FileSaverProps) => {
       sheet1.row(1).style('bold', true);
       sheet1.range('A1:' + endColumn + '1').style('fill', 'BFBFBF');
       range.style('border', true);
-      return workbook.outputAsync().then((res: any) => {
-        saveAs(res, 'file.xlsx');
-      });
+      // return workbook.outputAsync().then((res: any) => {
+      //   saveAs(res, 'file.xlsx');
+      // });
     });
   }
   return (

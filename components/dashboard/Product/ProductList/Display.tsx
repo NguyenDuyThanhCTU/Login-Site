@@ -29,29 +29,30 @@ const ListProductBox = ({
   const { currentUser } = useAuth();
   const router = useRouter();
   const HandleDelete = async (id: string) => {
-    deleteOne(currentUser.firebaseConfig, 'Products', id).then(() => {
-      router.refresh();
-    });
+    deleteOne(currentUser.firebaseConfig, 'Products', id);
+    router.refresh();
   };
 
   const HandleChangePosition = () => {
-    const sort = DataShow?.find((item) => item.stt === isNewPosition);
-    if (sort) {
-      updateOne(
-        currentUser.firebaseConfig,
-        'Products',
-        isSelected ? isSelected.id : '100',
-        {
-          stt: isNewPosition,
-        }
-      );
-      updateOne(currentUser.firebaseConfig, 'Products', sort.id, {
-        stt: isSelected?.stt,
-      });
-      router.refresh();
-      setOpenModal(false);
-    } else {
-    }
+    router.refresh();
+    console.log('refresh');
+    // const sort = DataShow?.find((item) => item.stt === isNewPosition);
+    // if (sort) {
+    //   updateOne(
+    //     currentUser.firebaseConfig,
+    //     'Products',
+    //     isSelected ? isSelected.id : '100',
+    //     {
+    //       stt: isNewPosition,
+    //     }
+    //   );
+    //   updateOne(currentUser.firebaseConfig, 'Products', sort.id, {
+    //     stt: isSelected?.stt,
+    //   });
+    //   router.refresh();
+    //   setOpenModal(false);
+    // } else {
+    // }
   };
 
   return (
@@ -88,7 +89,7 @@ const ListProductBox = ({
             );
             const DecodeLV0 = DecodeCategory?.level0;
             const DecodeLV1 = DecodeCategory?.level1
-              ? DecodeCategory?.level1.find(
+              ? DecodeCategory?.level1?.find(
                   (Citem: any) =>
                     slugify(Citem, {
                       locale: 'vi',
@@ -97,11 +98,18 @@ const ListProductBox = ({
                 )
               : '';
             let DecodeLV2;
-            if (item.level1) {
-              DecodeLV2 = DecodeCategory[item.level1].find(
-                (lv2Item: any) =>
-                  slugify(lv2Item, { locale: 'vi', lower: true }) ===
-                  item.level2
+            // if (item.level1) {
+            //   DecodeLV2 = DecodeCategory[item.level1].filter((lv2Item: any) =>
+            //     slugify(lv2Item, { locale: 'vi', lower: true }).includes(
+            //       item.level2
+            //     )
+            //   );
+            // }
+            if (item.level1 && Array.isArray(DecodeCategory[item.level1])) {
+              DecodeLV2 = DecodeCategory[item.level1].filter((lv2Item: any) =>
+                item.level2?.includes(
+                  slugify(lv2Item, { locale: 'vi', lower: true })
+                )
               );
             }
 
@@ -139,11 +147,29 @@ const ListProductBox = ({
                     </div>
                   </div>
                 </div>
-                <div className="flex items-center text-red-500">
+                <div className="flex items-center ">
                   {item.price ? (
-                    <p>
-                      {item.price} <sup>VNĐ</sup>
-                    </p>
+                    <>
+                      {item.newPrice ? (
+                        <div className="flex flex-col">
+                          <p className="">
+                            <span className="line-through text-gray-400 text-[10px]">
+                              {item.price}
+                            </span>{' '}
+                            <sup className="text-red-500">
+                              -{item.discount}%
+                            </sup>
+                          </p>
+                          <p className="">
+                            {item.newPrice} <sup>VNĐ</sup>
+                          </p>
+                        </div>
+                      ) : (
+                        <p className="">
+                          {item.price} <sup>VNĐ</sup>
+                        </p>
+                      )}
+                    </>
                   ) : (
                     <p className="text-gray-400">N/A</p>
                   )}
@@ -151,7 +177,7 @@ const ListProductBox = ({
                 <div className="flex flex-col items-start text-[14px] col-span-3">
                   <p className="px-3 py-2 bg-main rounded-full text-white"></p>
 
-                  <div className="flex flex-col">
+                  <div className="flex flex-col w-full">
                     {item.level0 && <p className="">{DecodeLV0}</p>}
                     {item.level0 && (
                       <div className="ml-1 flex items-center gap-1">
@@ -162,7 +188,18 @@ const ListProductBox = ({
                     {item.level0 && (
                       <div className="ml-2 flex items-center gap-1">
                         <FaAngleDoubleRight className="text-red-600" />
-                        <p className="">{DecodeLV2}</p>
+                        {DecodeLV2?.length > 0 && (
+                          <div className="flex gap-1 items-center overflow-x-auto w-full scrollbar-thin">
+                            {DecodeLV2.map((item: string, idx: number) => (
+                              <div
+                                className="border rounded-full border-slate-500"
+                                key={idx}
+                              >
+                                <p className="w-max py-1  px-2 "> {item}</p>
+                              </div>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>

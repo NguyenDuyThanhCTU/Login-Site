@@ -19,6 +19,7 @@ export interface InformationProps {
   analytics: string;
   remakerting: string;
   livechat: string;
+  tag: Array<string>;
 }
 
 export interface ContactProps {
@@ -33,6 +34,11 @@ export interface ContactProps {
   LogoWebsite: string | any;
   GoogleMap: string;
   direct: string;
+  HotlineEN: string;
+  PhoneNumberEN: string;
+  WebsiteTimeEN: string;
+  CompanyTimeEN: string;
+  CompanyAddressEN: string;
 }
 
 export interface SEOProps {
@@ -40,6 +46,9 @@ export interface SEOProps {
   Description: string;
   Favicon: string | any;
   Keyword: [];
+  TitleEN?: string;
+  DescriptionEN?: string;
+  KeywordEN: string;
 }
 
 // Product
@@ -59,9 +68,17 @@ export interface ProductProps {
   url: string;
   stt: number;
   image: string;
-  level0: string;
   date: string;
   price?: string;
+  level0: string;
+  level1?: string;
+  level2?: any;
+  discount?: number;
+  discountedAmount?: string;
+  newPrice?: string;
+}
+
+export interface ProductDetailProps extends ProductProps {
   subimage?: {
     uid: string;
     url: string;
@@ -70,9 +87,6 @@ export interface ProductProps {
   description?: string;
   detail?: string;
   describe?: string;
-  level1?: string;
-  level2?: string;
-
   Keyword?: [] | any;
 }
 
@@ -86,9 +100,9 @@ export interface SaleInfoProps {
 export interface SaleDataProps extends ProductProps {
   id: string;
   stt: number;
-  discount: string;
-  discountedAmount: string;
-  newPrice: string;
+  // discount: string;
+  // discountedAmount: string;
+  // newPrice: string;
 }
 
 // Post
@@ -176,6 +190,8 @@ export interface AccountProps {
   name: string;
   username: string;
   password: string;
+  feature: Array<string>;
+
   role: 'Standard' | 'Pro' | 'Advance' | 'Admin';
   apiKey: string;
   appId: string;
@@ -194,6 +210,7 @@ export interface AccountProps {
   dateofbirth?: string;
   gender?: string;
   introduce?: string;
+  Multilingual?: boolean;
 }
 
 //Plugin

@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { IoLogOut, IoSettingsOutline, IoSunnyOutline } from 'react-icons/io5';
 import { IoIosSearch } from 'react-icons/io';
 import { TbGridDots } from 'react-icons/tb';
-import { Drawer, Modal, Tooltip } from 'antd';
+import { Drawer, Modal, Switch, Tooltip } from 'antd';
 import { RxCross2 } from 'react-icons/rx';
 import { useStateProvider } from '@context/StateProvider';
 import { DashboardMapping, FunctionItem } from './items/items';
@@ -33,7 +33,7 @@ const Header = ({ dict, Key }: { dict: any; Key: string }) => {
   const [search, setSearch] = useState<string>('');
   const [searchRs, setSearchRs] = useState<AdminPageHeaderItemsProps[]>([]);
   const { currentUser, HandleDashboardNavigate, setVerify } = useAuth();
-  const { HandleNavigate } = useStateProvider();
+  const { HandleNavigate, setLanguage } = useStateProvider();
   useEffect(() => {
     const sort = dict.DashboardPage.Header?.filter(
       (product: AdminPageHeaderItemsProps) =>
@@ -43,14 +43,146 @@ const Header = ({ dict, Key }: { dict: any; Key: string }) => {
     setSearchRs(sort);
   }, [search]);
 
-  const DashboardHeader =
-    currentUser.role === 'Standard'
-      ? dict.DashboardPage.StandardHeader
-      : currentUser.role === 'Pro'
-      ? dict.DashboardPage.ProHeader
-      : currentUser.role === 'Advance'
-      ? dict.DashboardPage.AdvanceHeader
-      : currentUser.role === 'Admin' && dict.DashboardPage.AdminHeader;
+  // const DashboardHeader =
+  //   currentUser.role === 'Standard'
+  //     ? dict.DashboardPage.StandardHeader
+  //     : currentUser.role === 'Pro'
+  //     ? dict.DashboardPage.ProHeader
+  //     : currentUser.role === 'Advance'
+  //     ? dict.DashboardPage.AdvanceHeader
+  //     : currentUser.role === 'Admin' && dict.DashboardPage.AdminHeader;
+
+  const Header = [
+    {
+      label: 'Cấu Hình',
+      value: 'cau-hinh',
+      icon: 'IoSettingsOutline',
+      children: [],
+    },
+    {
+      label: 'Sản Phẩm',
+      value: 'danh-sach-san-pham',
+      icon: 'GiStarSattelites',
+      children: [
+        {
+          label: 'Danh Sách Sản Phẩm',
+          value: 'danh-sach-san-pham',
+          icon: 'PiCirclesThreePlusDuotone',
+        },
+        {
+          label: 'Danh Mục Sản Phẩm',
+          value: 'danh-muc-san-pham',
+          icon: 'CiBoxList',
+        },
+      ],
+    },
+    {
+      label: 'Bài Viết',
+      value: 'danh-sach-bai-viet',
+      icon: 'BsPostcard',
+      children: [
+        {
+          label: 'Danh Sách Bài Viết',
+          value: 'danh-sach-bai-viet',
+          icon: 'IoListSharp',
+        },
+        {
+          label: 'Danh Mục Bài Viết',
+          value: 'danh-muc-bai-viet',
+          icon: 'CgListTree',
+        },
+      ],
+    },
+    {
+      label: 'Truyền Thông',
+      value: 'kenh-truyen-thong',
+      icon: 'IoShareSocialOutline',
+      children: [
+        {
+          label: 'Kênh Truyền Thông',
+          value: 'kenh-truyen-thong',
+          icon: 'PiShareNetworkLight',
+        },
+        {
+          label: 'Slide giới thiệu',
+          value: 'slide-gioi-thieu',
+          icon: 'BiSlideshow',
+        },
+        {
+          label: 'Bộ sưu tập',
+          value: 'bo-suu-tap',
+          icon: 'IoImagesOutline',
+        },
+      ],
+    },
+    {
+      label: 'Tài Khoản',
+      value: 'thong-tin-tai-khoan',
+      icon: 'MdManageAccounts',
+      children: [
+        {
+          label: 'Thông Tin Tài Khoản',
+          value: 'thong-tin-tai-khoan',
+          icon: 'AiOutlineProfile',
+        },
+        {
+          label: 'Quản Lý Tài Khoản',
+          value: 'quan-ly-tai-khoan',
+          icon: 'BiSolidUserAccount',
+        },
+      ],
+    },
+    {
+      label: 'Báo Cáo',
+      value: 'bao-cao',
+      icon: 'TbReport',
+      children: [
+        {
+          label: 'Lượt Truy Cập',
+          value: 'luot-truy-cap',
+          icon: 'BiLoader',
+        },
+
+        {
+          label: 'Đơn Hàng',
+          value: 'don-hang',
+          icon: 'BiCube',
+        },
+        {
+          label: 'Sản Phẩm Xem Nhiều',
+          value: 'san-pham-xem-nhieu',
+          icon: 'BiHappy',
+        },
+      ],
+    },
+    {
+      label: 'Tiện Ích',
+      value: 'dich-vu',
+      icon: 'BiHive',
+      children: [
+        {
+          label: 'Chi Nhánh',
+          value: 'chi-nhanh',
+          icon: 'GoGitBranch',
+        },
+        {
+          label: 'Đối Tác',
+          value: 'doi-tac',
+          icon: 'LuGitCompare',
+        },
+        {
+          label: 'Phản Hồi của Khách Hàng',
+          value: 'phan-hoi-cua-khach-hang',
+          icon: 'BiPencil',
+        },
+        {
+          label: 'Bảo hành',
+          value: 'bao-hanh',
+          icon: 'BiCheckCircle',
+        },
+      ],
+    },
+  ];
   return (
     <div className="">
       <div className="border-b shadow-xl  h-[65px] p:hidden d:grid  grid-cols-4  bg-white ">
@@ -68,34 +200,41 @@ const Header = ({ dict, Key }: { dict: any; Key: string }) => {
           </div>
         </div>
         <div className="col-span-2 flex justify-center items-center ">
-          {DashboardHeader.map(
-            (item: AdminPageHeaderItemsProps, index: number) => {
-              const Icon = DashboardMapping[item.icon];
+          {Header.map((item: AdminPageHeaderItemsProps, index: number) => {
+            const Icon = DashboardMapping[item.icon];
 
-              return (
-                <div className="group relative" key={index}>
-                  <div
-                    onClick={() =>
-                      HandleDashboardNavigate(
-                        `/admin?tab=${item.value}&key=${Key}`
-                      )
-                    }
-                    className="flex cursor-pointer gap-2 items-center group font-light hover:bg-gray-100 h-max py-2 px-5  rounded-md"
-                  >
-                    <Icon />
-                    <p className="w-max text-[14px]">{item.label}</p>
-                  </div>
-                  {item?.children.length > 0 && (
-                    <div className="hidden group-hover:block absolute top-14 z-50 ">
-                      <HeaderDropDown Data={item.children} />
-                    </div>
-                  )}
+            return (
+              <div className="group relative" key={index}>
+                <div
+                  onClick={() =>
+                    HandleDashboardNavigate(
+                      `/admin?tab=${item.value}&key=${Key}`
+                    )
+                  }
+                  className="flex cursor-pointer gap-2 items-center group font-light hover:bg-gray-100 h-max py-2 px-5  rounded-md"
+                >
+                  <Icon />
+                  <p className="w-max text-[14px]">{item.label}</p>
                 </div>
-              );
-            }
-          )}
+                {item?.children.length > 0 && (
+                  <div className="hidden group-hover:block absolute top-14 z-50 ">
+                    <HeaderDropDown Data={item.children} />
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
         <div className="flex items-center justify-center gap-1 text-[24px] text-gray-600 w-full cursor-pointer ">
+          {currentUser.Multilingual && (
+            <Switch
+              checkedChildren="Tiếng Việt"
+              unCheckedChildren={<div className="text-black">English</div>}
+              defaultChecked
+              className="w-36"
+              onChange={(e) => setLanguage(e)}
+            />
+          )}
           <div>
             <Tooltip title="Chế độ ban đêm" placement="left">
               <div className="text-[#D6630A] bg-[#FFE6AD] text-[18px] p-2 rounded-full hover:bg-[#D6630A] hover:text-white duration-300">

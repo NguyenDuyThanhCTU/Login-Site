@@ -45,7 +45,7 @@ const General = ({ Data }: { Data: AccountProps[] }) => {
           </div>
 
           <div className="flex items-center gap-4 text-[14px] d:flex-row p:flex-col">
-            <FileSaver Data={Data} />
+            {/* <FileSaver Data={Data} /> */}
             <Search Data={Data} Select={HandleSelected} Field="name" />
             <SortTable Data={Data} setData={setDataFilter} Field="name" />
           </div>

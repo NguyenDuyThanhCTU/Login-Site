@@ -24,7 +24,7 @@ const Branch = ({ Data }: { Data: BranchProps[] }) => {
             <CRUDButton
               Clicked={setIsOpenAdd}
               Label="Thêm"
-              value="Đối tác"
+              value="Chi nhánh"
               Style="hover:bg-emerald-900 bg-emerald-700 "
             />
           </div>

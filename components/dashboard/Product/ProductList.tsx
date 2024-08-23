@@ -23,15 +23,12 @@ const ListProduct = ({ Category, Data }: ListProductProps) => {
   const [DataFilter, setDataFilter] = useState<ProductProps[]>([]);
   const [currentPagination, setCurrentPagination] = useState<number>(1);
   const [DataShow, setDataShow] = useState<ProductProps[]>([]);
-
   const { FormData, setFormData } = useStateProvider();
-
   const HandleSelectProduct = (id: string) => {
     const sort = Data?.filter((item: any) => item.id === id);
     setFormData(sort[0]);
     setIsOpenUpdateModel(true);
   };
-
   useEffect(() => {
     if (currentPagination === 1) {
       setDataShow(Data?.slice(0, 10));
@@ -78,6 +75,7 @@ const ListProduct = ({ Category, Data }: ListProductProps) => {
           setIsOpen={HandleSelectProduct}
           CategoryData={Category}
         />
+
         {Data?.length > 10 && (
           <div className="w-full justify-end flex mt-6 mr-2">
             <Pagination

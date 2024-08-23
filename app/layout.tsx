@@ -2,7 +2,7 @@ import Loading from '@components/Items/Loading';
 import { AuthProviders } from '@context/AuthProviders';
 import { StateProvider } from '@context/StateProvider';
 import '@styles/styles.css';
-
+import '@styles/CKGlobal.css';
 interface RootLayoutProps {
   children: React.ReactNode;
   params: { lang: string };

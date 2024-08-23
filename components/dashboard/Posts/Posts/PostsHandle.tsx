@@ -6,7 +6,7 @@ import React, { useEffect, useState } from 'react';
 
 import slugify from 'slugify';
 import Display from './Tab/Display';
-import { SEOForm, StaticForm } from './Tab/Form';
+import { DynamicForm, SEOForm, StaticForm } from './Tab/Form';
 import { CategoryProps } from '@assets/props';
 import { insertAndCustomizeId, updateOne } from '@config/api/api';
 import { useAuth } from '@context/AuthProviders';
@@ -27,7 +27,6 @@ const PostsHandle = ({
   const { FormData, setFormData } = useStateProvider();
   const { currentUser } = useAuth();
   const router = useRouter();
-
   useEffect(() => {
     const randomText = Math.floor(Math.random() * 100000000000);
     // const headUrl = slugify(`${FormData?.title}-p${randomText}.html`, {
@@ -111,20 +110,25 @@ const PostsHandle = ({
           {
             key: '2',
             label: `${
-              Type === 'update' ? 'Chỉnh sửa bài viết' : 'Cấu hình SEO'
+              Type === 'update' ? 'Chỉnh sửa bài viết' : 'Thông tin khác'
             }`,
             children: (
               <>
                 {Type === 'update' ? (
                   <StaticForm Category={Category} />
                 ) : (
-                  <SEOForm />
+                  <DynamicForm />
                 )}
               </>
             ),
           },
           {
             key: '3',
+            label: `${Type === 'update' ? 'Thông tin khác' : 'Cấu hình SEO'}`,
+            children: <>{Type === 'update' ? <DynamicForm /> : <SEOForm />}</>,
+          },
+          {
+            key: '4',
             label: `${Type === 'update' ? 'Cấu hình SEO' : ''}`,
             children: <>{Type === 'update' ? <SEOForm /> : <></>}</>,
           },

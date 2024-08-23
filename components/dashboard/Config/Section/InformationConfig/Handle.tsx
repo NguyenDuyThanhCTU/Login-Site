@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import React from 'react';
 import { useAuth } from '@context/AuthProviders';
 import InputForm from '@components/dashboard/items/UI/InputForm';
+import { Switch } from 'antd';
 // import { HeaderItems } from '@assets/items';
 
 interface HandleFormProps {
@@ -103,7 +104,7 @@ export const HandleLogoForm = ({ setIsOpen, Logo }: HandleFormProps) => {
 
 export const HandleFacebookForm = ({ setIsOpen }: HandleFormProps) => {
   const router = useRouter();
-  const { FormData } = useStateProvider();
+  const { FormData, isLanguage } = useStateProvider();
   const { currentUser } = useAuth();
 
   const HandleSubmit = async () => {
@@ -120,9 +121,25 @@ export const HandleFacebookForm = ({ setIsOpen }: HandleFormProps) => {
   return (
     <>
       <div className="flex flex-col gap-3 p-2  border-b ">
-        <InputForm Label="Tiêu đề" Type="Input" field="ogtitle" />
-        <InputForm Label="Mô tả" Type="TextArea" field="ogdescription" />
-        <InputForm Label="Hình ảnh" Type="Upload" field="ogimage" />
+        {isLanguage ? (
+          <>
+            {' '}
+            <InputForm Label="Tiêu đề" Type="Input" field="ogtitle" />
+            <InputForm Label="Mô tả" Type="TextArea" field="ogdescription" />
+            <InputForm Label="Hình ảnh" Type="Upload" field="ogimage" />
+          </>
+        ) : (
+          <>
+            {' '}
+            <InputForm Label="Title" Type="Input" field="ogtitleEN" />
+            <InputForm
+              Label="Description"
+              Type="TextArea"
+              field="ogdescriptionEN"
+            />
+            <InputForm Label="Image" Type="Upload" field="ogimageEN" />
+          </>
+        )}
       </div>
       <div className="flex w-full justify-end pt-2 gap-4">
         <div

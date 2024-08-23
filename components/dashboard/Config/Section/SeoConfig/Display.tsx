@@ -20,21 +20,22 @@ type BasicSEOItemsProps = {
 };
 
 export const BasicSEOBox = ({ setIsOpen, Data }: SEOBoxProps) => {
+  const { isLanguage } = useStateProvider();
   const BasicSEOItems: BasicSEOItemsProps[] = [
     {
-      label: 'Tiêu đề trang ',
-      value: Data?.Title,
+      label: isLanguage ? 'Tiêu đề trang ' : 'Title (Tag)',
+      value: isLanguage ? Data?.Title : Data?.TitleEN,
       tooltip: '',
     },
 
     {
-      label: 'Thẻ mô tả',
-      value: Data?.Description,
+      label: isLanguage ? 'Thẻ mô tả' : 'Description (Tag)',
+      value: isLanguage ? Data?.Description : Data?.DescriptionEN,
       tooltip: '',
     },
     {
-      label: 'Thẻ từ khóa',
-      value: Data?.Keyword,
+      label: isLanguage ? 'Thẻ từ khóa' : 'Keyword (Tag)',
+      value: isLanguage ? Data?.Keyword : Data?.KeywordEN,
       tooltip: '',
     },
 
