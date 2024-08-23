@@ -20,6 +20,7 @@ import PostsCategory from '@components/dashboard/Posts/PostsCategory';
 import Partner from '@components/dashboard/Plugins/Partner';
 import FeedBack from '@components/dashboard/Plugins/FeedBack';
 import Test from '@components/dashboard/Test/Test';
+import Guarantee from '@components/dashboard/Plugins/Guarantee';
 
 export const metadata: Metadata = {
   title: 'Quản trị website',
@@ -233,6 +234,15 @@ const DashboardPage = async ({ searchParams, params }: DashboardPageProps) => {
         componentToRender = <General Data={AccountData} />;
       } else {
         componentToRender = <Error />;
+      }
+
+      break;
+    case 'bao-hanh':
+      if (CurrentUser.role === 'Admin') {
+        const GuaranteeData = await find(firebaseConfig, 'Guarantee', true);
+        componentToRender = (
+          <Guarantee Data={GuaranteeData} ProductData={ProductsData} />
+        );
       }
 
       break;

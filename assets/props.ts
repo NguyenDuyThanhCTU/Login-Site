@@ -233,4 +233,17 @@ export interface PartnerProps {
   url: string;
 }
 
+export interface GuaranteeProps {
+  id: string;
+  phonenumber: string;
+  guaranteeCode: string;
+  userID: string;
+  name: string;
+  GuaranteeList: {
+    expirationDate: string;
+    daysRemaining: string;
+    productID: string;
+  };
+}
+
 export interface FeedbackProps {}

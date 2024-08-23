@@ -64,7 +64,7 @@ const Partner = ({ Data }: { Data: PartnerProps[] }) => {
         />
       </Modal>
       <Modal
-        title="Thêm chi nhánh"
+        title="Chỉnh sửa đối tác"
         footer={null}
         open={isOpenUpdate}
         onCancel={() => setIsOpenUpdate(false)}
